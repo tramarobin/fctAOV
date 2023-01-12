@@ -1087,7 +1087,7 @@ if numel(effectRM)>1
                         pSelected=0;
                         if pINT<pcritical(1)
                             isSignificant=1;
-                            phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},condNames{rmEffect(nRm2)}{nModRm});
+                            phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
                             pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                             pSelected=1;
                         end
@@ -1097,8 +1097,9 @@ if numel(effectRM)>1
                         %                             pSelected=1;
                         %                         end
                         if pINT<pcritical(end) &  pSelected==0
-                            phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},condNames{rmEffect(nRm2)}{nModRm});
-                            pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};                        pSelected=1;
+                            phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
+                            pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                            pSelected=1;
                         end
                         %                         if pMAIN<pcritical(end) &  pSelected==0
                         %                             pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
@@ -1220,7 +1221,7 @@ if numel(effectRM)>1
                     pSelected=0;
                     if pINT<pcritical(1)
                         isSignificant=1;
-                        phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},condNames{rmEffect(nRm2)}{nModRm});
+                        phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
                         pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                         pSelected=1;
                     end
@@ -1230,8 +1231,9 @@ if numel(effectRM)>1
                     %                         pSelected=1;
                     %                     end
                     if pINT<pcritical(end) &  pSelected==0
-                        phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},condNames{rmEffect(nRm2)}{nModRm});
-                        pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};                        pSelected=1;
+                        phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
+                        pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                        pSelected=1;
                     end
                     %                     if pMAIN<pcritical(end) &  pSelected==0
                     %                         pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
