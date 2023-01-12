@@ -1,4 +1,4 @@
-function [ES]=esCalculation0D(DATA)
+function [ES, diff, relDiff]=esCalculation0D(DATA)
 
 n1 = numel(DATA{1});
 n2 = numel(DATA{2});
@@ -9,5 +9,8 @@ SS2 = nanstd(DATA{2}).^2*(n2-1);
 pooledsd = sqrt((SS1 + SS2)/nu);
 d = (nanmean(DATA{1})-nanmean(DATA{2}))./pooledsd;
 ES =  abs(d);
+
+diff=nanmean(DATA{1})-nanmean(DATA{2});
+relDiff=100*(nanmean(DATA{1})-nanmean(DATA{2}))/nanmean(DATA{2});
 
 end

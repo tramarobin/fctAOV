@@ -593,7 +593,7 @@ for nCond=1:numel(rmEffect)
         [ES(o,1), diff(o,1), relDiff(o,1)]=esCalculation0D(dES);
     end
     postHoc.(condNames{rmEffect(nCond)})=[postHoc.(condNames{rmEffect(nCond)}) table(ES) table(diff) table(relDiff)];
-    clear ES diff relDiff
+    clear ES
 
     % interaction of rm with independant effect
     if numel(indEffect)>0
@@ -607,8 +607,8 @@ for nCond=1:numel(rmEffect)
                 end
             end
             ES=ES(:); diff=diff(:); relDiff=relDiff(:);
-            postHoc.([condNames{rmEffect(nCond)} 'By' condNames{indEffect(nInd)}])=[postHoc.([condNames{rmEffect(nCond)} 'By' condNames{indEffect(nInd)}]) table(ES) table(diff) table(relDiff)];
-            clear ES diff relDiff
+            postHoc.([condNames{rmEffect(nCond)} 'By' condNames{indEffect(nInd)}])=[postHoc.([condNames{rmEffect(nCond)} 'By' condNames{indEffect(nInd)}]) table(ES)];
+            clear ES
         end
     end
 
@@ -626,9 +626,9 @@ for nCond=1:numel(rmEffect)
             end
             ES=ES(:); diff=diff(:); relDiff=relDiff(:); diff=diff(:); relDiff=relDiff(:);
             if ~isempty(findcolExact(phFieldnames,[condNames{rmEffect(nCond)} 'By' fieldNames{nInd}]))
-                postHoc.([condNames{rmEffect(nCond)} 'By' fieldNames{nInd}])=[postHoc.([condNames{rmEffect(nCond)} 'By' fieldNames{nInd}]) table(ES) table(diff) table(relDiff)];
+                postHoc.([condNames{rmEffect(nCond)} 'By' fieldNames{nInd}])=[postHoc.([condNames{rmEffect(nCond)} 'By' fieldNames{nInd}]) table(ES)];
             end
-            clear ES diff relDiff
+            clear ES
         end
     end
 end
@@ -643,8 +643,8 @@ if numel(rmEffect)>1
                     dES{2}=tXl(:,order4ES.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}])(o,2));
                     [ES(o,1), diff(o,1), relDiff(o,1)]=esCalculation0D(dES);
                 end
-                postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}])=[postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}]) table(ES) table(diff) table(relDiff)];
-                clear ES diff relDiff
+                postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}])=[postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}]) table(ES)];
+                clear ES
             end
         end
     end
@@ -660,12 +660,12 @@ if numel(rmEffect)>1 & numel(indEffect)>0
                         for o=1:size(order4ES.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}]),1)
                             dES{1}=tXl(idxIndependantEffect(:,nInd)==nModInd,order4ES.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}])(o,1));
                             dES{2}=tXl(idxIndependantEffect(:,nInd)==nModInd,order4ES.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)}])(o,2));
-                            [ES(o,nModInd), diff(o,nModInd), relDiff(o,nModInd)]=esCalculation0D(dES);
+                            [ES(o,nModInd), diff(o,nModInd)), relDiff(o,nModInd)]=esCalculation0D(dES);
                         end
                     end
                     ES=ES(:); diff=diff(:); relDiff=relDiff(:);
-                    postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)} 'By' condNames{indEffect(nInd)}])=[postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)} 'By' condNames{indEffect(nInd)}]) table(ES) table(diff) table(relDiff)];
-                    clear ES diff relDiff
+                    postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)} 'By' condNames{indEffect(nInd)}])=[postHoc.([condNames{rmEffect(nCond1)} 'By'  condNames{rmEffect(nCond2)} 'By' condNames{indEffect(nInd)}]) table(ES)];
+                    clear ES
                 end
             end
         end
@@ -682,8 +682,8 @@ if numel(indEffect)>0
             dES{2}=dataAllRm(order4ES.(condNames{indEffect(nInd)})(o,2)==idxIndependantEffect(:,nInd));
             [ES(o,1), diff(o,1), relDiff(o,1)]=esCalculation0D(dES);
         end
-        postHoc.(condNames{indEffect(nInd)})=[postHoc.(condNames{indEffect(nInd)}) table(ES) table(diff) table(relDiff)];
-        clear ES diff relDiff
+        postHoc.(condNames{indEffect(nInd)})=[postHoc.(condNames{indEffect(nInd)}) table(ES)];
+        clear ES
     end
 end
 
@@ -699,8 +699,8 @@ if numel(indEffect)>0 & numel(rmEffect)>0
                 end
             end
             ES=ES(:); diff=diff(:); relDiff=relDiff(:);
-            postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm)}])=[postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm)}]) table(ES) table(diff) table(relDiff)];
-            clear ES diff relDiff
+            postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm)}])=[postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm)}]) table(ES)];
+            clear ES
         end
     end
 end
@@ -721,8 +721,8 @@ if numel(rmEffect)==2 & numel(indEffect)>0
                         end
                     end
                     ES=ES(:); diff=diff(:); relDiff=relDiff(:);
-                    postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}])=[postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]) table(ES) table(diff) table(relDiff)];
-                    clear ES diff relDiff
+                    postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}])=[postHoc.([condNames{indEffect(nInd)} 'By' condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]) table(ES)];
+                    clear ES
                 end
             end
         end
@@ -744,8 +744,8 @@ if numel(indEffect)>1
                     end
                 end
                 ES=ES(:); diff=diff(:); relDiff=relDiff(:);
-                postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}])=[postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]) table(ES) table(diff) table(relDiff)];
-                clear ES diff relDiff
+                postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}])=[postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]) table(ES)];
+                clear ES
             end
         end
     end
@@ -770,9 +770,9 @@ if numel(indEffect)>1 & numel(rmEffect)>0
                     end
                     ES=ES(:); diff=diff(:); relDiff=relDiff(:);
                     if ~isempty(findcolExact(phFieldnames,[condNames{nInd1} 'By' condNames{nInd2} 'By' condNames{rmEffect(nRm)}]))
-                        postHoc.([condNames{nInd1} 'By' condNames{nInd2} 'By' condNames{rmEffect(nRm)}])=[postHoc.([condNames{nInd1} 'By' condNames{nInd2} 'By' condNames{rmEffect(nRm)}]) table(ES) table(diff) table(relDiff)];
+                        postHoc.([condNames{nInd1} 'By' condNames{nInd2} 'By' condNames{rmEffect(nRm)}])=[postHoc.([condNames{nInd1} 'By' condNames{nInd2} 'By' condNames{rmEffect(nRm)}]) table(ES)];
                     end
-                    clear ES diff relDiff
+                    clear ES
                 end
             end
         end
