@@ -38,7 +38,9 @@ for nRm=1:sum(isRM)
     end
 end
 
-if sum(isRM)==1
+if sum(isRM)==0
+    condNames4Table={'No RM'};
+elseif sum(isRM)==1
     effectRMaov{1}=transpose(string(cond4effect{rmEffect(1)}));
     effectRM{1}=cond4effect{rmEffect(1)};
     condNames4Table=cond4effect{rmEffect(1)};
@@ -137,8 +139,12 @@ elseif numel(indEffect)==2
 end
 
 tXl=[];
-for i=1:numel(cond4effect{rmEffect(1)})
-    tXl=[tXl t{i}];
+if ~isempty(nRm)
+    for i=1:numel(cond4effect{rmEffect(1)})
+        tXl=[tXl t{i}];
+    end
+else
+    tXl=data;
 end
 % nan the subjects with issues
 tXl(isnan(mean(tXl,2)),:)=nan;
@@ -264,8 +270,21 @@ tablemeans.allData=[tXL; tXLmeans];
 
 %% Stats
 % aov and posthoc
-for k=1:numel(cond4effect{rmEffect(1)})
-    data4stats(:,k,:)=t{k};
+if ~isempty(nRm)
+    for k=1:numel(cond4effect{rmEffect(1)})
+        data4stats(:,k,:)=t{k};
+    end
+else
+    data4stats(:,1,:)=data;
+end
+
+if numel(rmEffect)==0 & numel(indEffect)==1
+    [p,tbl,stats]=anova1(data4stats,idxIndependantEffect,'off');
+end
+
+if numel(rmEffect)==1 & numel(indEffect)==0
+    [tbl,rm]=mixed_anova(data4stats,[], {condNames{rmEffect(1)}});
+    rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
 end
 
 if numel(rmEffect)==2 & numel(indEffect)==2
@@ -279,6 +298,12 @@ elseif numel(rmEffect)==1 & numel(indEffect)==1
     [tbl,rm]=mixed_anova(data4stats,idxIndependantEffect, {condNames{rmEffect(1)}}, {condNames{indEffect(1)}});
     rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
 
+elseif numel(rmEffect)==1 & numel(indEffect)==2
+
+    [tbl,rm]=mixed_anova(data4stats,idxIndependantEffect, {condNames{rmEffect(1)}},  {condNames{indEffect(1)}, condNames{indEffect(2)}});
+    rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
+
+
 elseif numel(rmEffect)==2 & numel(indEffect)==1
 
     [tbl,rm]=mixed_anova(data4stats,idxIndependantEffect, {condNames{rmEffect(1)}, condNames{rmEffect(2)}}, {condNames{indEffect(1)}});
@@ -287,36 +312,64 @@ elseif numel(rmEffect)==2 & numel(indEffect)==1
 
 end
 
-rNames=tbl.Properties.RowNames;
-cNamest=tbl.Properties.VariableNames;
+if istable(tbl)
+    rNames=tbl.Properties.RowNames;
+    cNamest=tbl.Properties.VariableNames;
 
-rCol=ones(size(tbl,1),1);
-rCol(1)=0;
-rCol(findcol(rNames,'Error'))=0;
-rCol=logical(rCol);
-rNames=rNames(rCol);
-for i=1:numel(rNames)
-    rNames{i}=strrep(rNames{i}, '(Intercept):','');
+    rCol=ones(size(tbl,1),1);
+    rCol(1)=0;
+    rCol(findcol(rNames,'Error'))=0;
+    rCol=logical(rCol);
+    rNames=rNames(rCol);
+    for i=1:numel(rNames)
+        rNames{i}=strrep(rNames{i}, '(Intercept):','');
+    end
+    for i=1:size(tbl,2)
+        aovt(:,i)=table(tbl{rCol,i});
+    end
+
+    aovt.Properties.VariableNames=cNamest;
+    aov=[table(rNames,'VariableNames',{'Effect'}) aovt];
+
+else
+
+    rNames=tbl(2:end,1);
+    cNamest=tbl(1,:);
+
+    aov=splitvars(table(tbl(2,:)));
+    aov{1,1}=condNames(1);
+    aov.Properties.VariableNames={'Effect', 'SumSq', 'DF', 'MeanSq', 'F', 'pValue'};
 end
-for i=1:size(tbl,2)
-    aovt(:,i)=table(tbl{rCol,i});
-end
-aovt.Properties.VariableNames=cNamest;
-aov=[table(rNames,'VariableNames',{'Effect'}) aovt];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% 1 effect
-for nCond=1:numel(condNames)
-    ph=multcompare(rm,condNames{nCond},'ComparisonType',postHocType);
-    [whichPH,order4ES.(condNames{nCond})]=findPH(allModalities{nCond});
-    postHoc.(condNames{nCond})=ph(whichPH,:);
-    if any(nCond==indEffect)
-        postHoc.(condNames{nCond}).([condNames{nCond} '_1'])=modalitiesInd{nCond}(postHoc.(condNames{nCond}).([condNames{nCond} '_1']));
-        postHoc.(condNames{nCond}).([condNames{nCond} '_2'])=modalitiesInd{nCond}(postHoc.(condNames{nCond}).([condNames{nCond} '_2']));
+if numel(rmEffect)==0 & numel(indEffect)==1
+
+    ph=multcompare(stats,"CriticalValueType",postHocType,"Display","off");
+    [whichPH,order4ES.(condNames{1})]=findPH(allModalities{1});
+%     phNew=ph(whichPH,:);
+
+    phNew(:,1)=table(modalitiesInd{1}(ph(:,1)));
+    phNew(:,2)=table(modalitiesInd{1}(ph(:,2)));
+    phNew(:,3)=table(ph(:,3));
+    phNew(:,4)=table(ph(:,4));
+    phNew(:,5)=table(ph(:,6));
+    phNew.Properties.VariableNames={[condNames{1} '_1'], [condNames{1} '_2'], 'Difference', 'StdErr', 'pValue'};
+    postHoc.(condNames{1})=phNew;
+
+else
+
+    for nCond=1:numel(condNames)
+        ph=multcompare(rm,condNames{nCond},'ComparisonType',postHocType);
+        [whichPH,order4ES.(condNames{nCond})]=findPH(allModalities{nCond});
+        postHoc.(condNames{nCond})=ph(whichPH,:);
+        if any(nCond==indEffect)
+            postHoc.(condNames{nCond}).([condNames{nCond} '_1'])=modalitiesInd{nCond}(postHoc.(condNames{nCond}).([condNames{nCond} '_1']));
+            postHoc.(condNames{nCond}).([condNames{nCond} '_2'])=modalitiesInd{nCond}(postHoc.(condNames{nCond}).([condNames{nCond} '_2']));
+        end
     end
 end
-
 %% 2 effects
 if numel(condNames)>1
     for nCond1=1:numel(condNames)
@@ -375,9 +428,12 @@ if numel(condNames)>2
                     for s=1:numel(int2.([condNames{nCond1} 'By' condNames{nCond2}]))
                         indInt2.([condNames{nCond1} 'By' condNames{nCond2}])(s,1)=findcol(modInt2.([condNames{nCond1} 'By' condNames{nCond2}]), int2.([condNames{nCond1} 'By' condNames{nCond2}])(s));
                     end
-                    [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond1} 'By' condNames{nCond2}]), {condNames{rmEffect(1)}, condNames{rmEffect(2)}}, {[condNames{nCond1} 'By' condNames{nCond2}]});
-                    rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
-                    rm.WithinDesign.(condNames{rmEffect(2)})=effectRMaov{2};
+
+                    [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond1} 'By' condNames{nCond2}]), {condNames{nCond3}}, {[condNames{nCond1} 'By' condNames{nCond2}]});
+                    if any(nCond3==rmEffect)
+                        rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
+                    end
+
                     ph=multcompare(rm,[condNames{nCond1} 'By' condNames{nCond2}], 'By', condNames{nCond3}, 'ComparisonType',postHocType);
                     [whichPH]=findPHint(modInt2.([condNames{nCond1} 'By' condNames{nCond2}]),allModalities{nCond3});
                     [~, order4ES.([condNames{nCond1} 'By' condNames{nCond2}])]=findPH(modInt2.([condNames{nCond1} 'By' condNames{nCond2}]));
@@ -397,9 +453,18 @@ if numel(condNames)>2
                     for s=1:numel( int2.([condNames{nCond2} 'By' condNames{nCond3}]))
                         indInt2.([condNames{nCond2} 'By' condNames{nCond3}])(s,1)=findcol(modInt2.([condNames{nCond2} 'By' condNames{nCond3}]), int2.([condNames{nCond2} 'By' condNames{nCond3}])(s));
                     end
-                    [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond2} 'By' condNames{nCond3}]), {condNames{rmEffect(1)}, condNames{rmEffect(2)}}, {[condNames{nCond2} 'By' condNames{nCond3}]});
-                    rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
-                    rm.WithinDesign.(condNames{rmEffect(2)})=effectRMaov{2};
+                    if any(nCond1==indEffect)
+                        if numel(condNames)>3
+                            [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond2} 'By' condNames{nCond3}]), {condNames{rmEffect(1)}, condNames{rmEffect(2)}}, {[condNames{nCond2} 'By' condNames{nCond3}]});
+                            rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
+                            rm.WithinDesign.(condNames{rmEffect(2)})=effectRMaov{2};
+                        end
+                    elseif any(nCond1==rmEffect)
+                        if numel(condNames)==3
+                            [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond2} 'By' condNames{nCond3}]), {condNames{nCond1}}, {[condNames{nCond2} 'By' condNames{nCond3}]});
+                            rm.WithinDesign.(condNames{nCond1})=effectRMaov{1};
+                        end
+                    end
                     ph=multcompare(rm,condNames{nCond1},'By', [condNames{nCond2} 'By' condNames{nCond3}], 'ComparisonType',postHocType);
                     [whichPH]=findPHint(allModalities{nCond1},modInt2.([condNames{nCond2} 'By' condNames{nCond3}]));
                     ph=ph(whichPH,:);
@@ -813,11 +878,11 @@ end
 %% Repeated measures effects
 %% MAIN EFFECT
 % Lines
-if numel(effectRM)>0
+if ~isempty(rmEffect)
     if plotLines
         for nRm=1:numel(modalitiesRM)
 
-            f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesRM{nRm}) 5+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
+            f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
             for x=1:numel(modalitiesRM{nRm})
                 dataMeans(x)=nanmean(nanmean(data4plot.allData(:,col4means{nRm}(x,:)),2));
@@ -910,7 +975,7 @@ if numel(effectRM)>0
 
     % Text
     for nRm=1:numel(effectRM)
-        f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesRM{nRm}) 5+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
+        f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
         for x=1:numel(modalitiesRM{nRm})
             dataMeans(x)=nanmean(nanmean(data4plot.allData(:,col4means{nRm}(x,:)),2));
@@ -1015,13 +1080,14 @@ end
 
 %% INTERACTIONS of RM
 % lines
+if ~isempty(rmEffect)
 if numel(effectRM)>1
     if plotLines
         for nRm1=1:numel(modalitiesRM)
             for nRm2=1:numel(modalitiesRM)
                 if nRm1~=nRm2
 
-                    f=figure('units','centimeters','position',[0 0 10+4*numel(allModalities{rmEffect(nRm1)}) 5+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
+                    f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
 
                     for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
 
@@ -1151,7 +1217,7 @@ if numel(effectRM)>1
         for nRm2=1:numel(modalitiesRM)
             if nRm1~=nRm2
 
-                f=figure('units','centimeters','position',[0 0 10+4*numel(allModalities{rmEffect(nRm1)}) 5+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
+                f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
                 for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
 
                     varData=tXl(:,col4means{nRm1}(:,nModRm));
@@ -1285,16 +1351,17 @@ if numel(effectRM)>1
         end
     end
 end
+end
 
 %% Main RM with simple IND interaction
 % Lines
-if numel(effectRM)>0 & numel(indEffect)>0
+if ~isempty(rmEffect) & numel(indEffect)>0
     if plotLines
         for nRm=1:numel(effectRM)
             for nInd=1:numel(indEffect)
                 for nMod=1:numel(allMod.(condNames{indEffect(nInd)}))
 
-                    f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesRM{nRm}) 5+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
+                    f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
                     for x=1:numel(modalitiesRM{nRm})
                         dataMeans(x)=nanmean(nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm}(x,:)),2));
@@ -1415,7 +1482,7 @@ if numel(effectRM)>0 & numel(indEffect)>0
         for nInd=1:numel(indEffect)
             for nMod=1:numel(allMod.(condNames{indEffect(nInd)}))
 
-                f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesRM{nRm}) 5+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
+                f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
                 for x=1:numel(modalitiesRM{nRm})
                     dataMeans(x)=nanmean(nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm}(x,:)),2));
@@ -1547,7 +1614,7 @@ if numel(rmEffect)>0 & numel(indEffect)>1
                         for nMod1=1:numel(allMod.(condNames{indEffect(nInd1)}))
                             for nMod2=1:numel(allMod.(condNames{indEffect(nInd2)}))
 
-                                f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesRM{nRm}) 5+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
+                                f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
                                 for x=1:numel(modalitiesRM{nRm})
                                     dataMeans(x)=nanmean(nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nMod1}).(allMod.(condNames{indEffect(nInd2)}){nMod2})(:,col4means{nRm}(x,:)),2));
@@ -1713,7 +1780,7 @@ if numel(rmEffect)>0 & numel(indEffect)>1
                     for nMod1=1:numel(allMod.(condNames{indEffect(nInd1)}))
                         for nMod2=1:numel(allMod.(condNames{indEffect(nInd2)}))
 
-                            f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesRM{nRm}) 5+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
+                            f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
                             for x=1:numel(modalitiesRM{nRm})
                                 dataMeans(x)=nanmean(nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nMod1}).(allMod.(condNames{indEffect(nInd2)}){nMod2})(:,col4means{nRm}(x,:)),2));
@@ -1884,7 +1951,7 @@ if numel(rmEffect)>1 & numel(indEffect)>0
                     for nInd=1:numel(indEffect)
                         for nMod=1:numel(allMod.(condNames{indEffect(nInd)}))
 
-                            f=figure('units','centimeters','position',[0 0 10+4*numel(allModalities{rmEffect(nRm1)}) 5+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
+                            f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
 
                             for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
                                 dataMeans=nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
@@ -2053,7 +2120,7 @@ if numel(rmEffect)>1 & numel(indEffect)>0
                 for nInd=1:numel(indEffect)
                     for nMod=1:numel(allMod.(condNames{indEffect(nInd)}))
 
-                        f=figure('units','centimeters','position',[0 0 10+4*numel(allModalities{rmEffect(nRm1)}) 5+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
+                        f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
 
                         for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
                             dataMeans=nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
@@ -2241,7 +2308,7 @@ if numel(rmEffect)>1 & numel(indEffect)>1
                                 for nModInd1=1:numel(allMod.(condNames{indEffect(nInd1)}))
                                     for nModInd2=1:numel(allMod.(condNames{indEffect(nInd2)}))
 
-                                        f=figure('units','centimeters','position',[0 0 10+4*numel(allModalities{rmEffect(nRm1)}) 5+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
+                                        f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
 
                                         for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
                                             dataMeans=nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nModInd1}).(allMod.(condNames{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
@@ -2383,7 +2450,7 @@ if numel(rmEffect)>1 & numel(indEffect)>1
                             for nModInd1=1:numel(allMod.(condNames{indEffect(nInd1)}))
                                 for nModInd2=1:numel(allMod.(condNames{indEffect(nInd2)}))
 
-                                    f=figure('units','centimeters','position',[0 0 10+4*numel(allModalities{rmEffect(nRm1)}) 5+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
+                                    f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
 
                                     for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
                                         dataMeans=nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nModInd1}).(allMod.(condNames{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
@@ -2528,7 +2595,7 @@ if numel(indEffect)>0
     if plotLines
         for nInd=1:numel(indEffect)
 
-            f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd}) 5+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
+            f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
 
             for nMod=1:numel(modalitiesInd{nInd})
                 dataMeans(nMod)=nanmean(nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod}),2));
@@ -2628,7 +2695,7 @@ if numel(indEffect)>0
     % Text
     for nInd=1:numel(indEffect)
 
-        f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd}) 5+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
+        f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
 
         for nMod=1:numel(modalitiesInd{nInd})
             dataMeans(nMod)=nanmean(nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod}),2));
@@ -2678,7 +2745,9 @@ if numel(indEffect)>0
 
         nAov=findcolExact(aov.Effect,condNames{indEffect(nInd)});
         pMAIN=aov{nAov,6};
-
+        if iscell(pMAIN)
+            pMAIN=pMAIN{1};
+        end
         amp=[max(yl)-min(yl)];
         isSignificant=0;
         pValues=ones(1,size(postHoc.(condNames{indEffect(nInd)}),1));
@@ -2740,7 +2809,7 @@ if numel(indEffect)>0 & numel(rmEffect)>0
         for nRm=1:numel(effectRM)
             for nInd=1:numel(indEffect)
 
-                f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd}) 5+9/16*4*numel(modalitiesInd{nInd})*numel(modalitiesRM{nRm})],'visible','off');
+                f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})*numel(modalitiesRM{nRm})],'visible','off');
 
                 for nMod=1:numel(allMod.(condNames{rmEffect(nRm)}))
 
@@ -2877,7 +2946,7 @@ if numel(indEffect)>0 & numel(rmEffect)>0
     for nRm=1:numel(effectRM)
         for nInd=1:numel(indEffect)
 
-            f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd}) 5+9/16*4*numel(modalitiesInd{nInd})*numel(modalitiesRM{nRm})],'visible','off');
+            f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})*numel(modalitiesRM{nRm})],'visible','off');
 
             for nMod=1:numel(allMod.(condNames{rmEffect(nRm)}))
 
@@ -3024,7 +3093,7 @@ if numel(indEffect)>1
             for nInd2=1:numel(indEffect)
                 if nInd1~=nInd2
 
-                    f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd1}) 5+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
+                    f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd1}) 4+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
 
                     for nMod2=1:numel(modalitiesInd{nInd2})
 
@@ -3163,7 +3232,7 @@ if numel(indEffect)>1
         for nInd2=1:numel(indEffect)
             if nInd1~=nInd2
 
-                f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd1}) 5+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
+                f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd1}) 4+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
 
                 for nMod2=1:numel(modalitiesInd{nInd2})
 
@@ -3315,7 +3384,7 @@ if numel(indEffect)>1 & numel(rmEffect)>0
                     for nInd2=1:numel(indEffect)
                         if nInd1~=nInd2
 
-                            f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd1}) 5+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
+                            f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd1}) 4+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
 
                             for nMod2=1:numel(modalitiesInd{nInd2})
 
@@ -3503,7 +3572,7 @@ if numel(indEffect)>1 & numel(rmEffect)>0
                 for nInd2=1:numel(indEffect)
                     if nInd1~=nInd2
 
-                        f=figure('units','centimeters','position',[0 0 10+4*numel(modalitiesInd{nInd1}) 5+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
+                        f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd1}) 4+9/16*4*numel(modalitiesInd{nInd1})*numel(modalitiesInd{nInd2})],'visible','off');
 
                         for nMod2=1:numel(modalitiesInd{nInd2})
 
