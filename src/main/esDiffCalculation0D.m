@@ -3,7 +3,6 @@ function [ES, ESsd, diff, diffSD, relDiff, relDiffSD]=esDiffCalculation0D(DATA,i
 n1 = numel(DATA{1});
 n2 = numel(DATA{2});
 nu = n1+n2-2;
-Gnu = gamma(nu/2)/(sqrt(nu/2)*gamma((nu-1)/2));
 SS1 = nanstd(DATA{1}).^2*(n1-1);
 SS2 = nanstd(DATA{2}).^2*(n2-1);
 pooledsd = sqrt((SS1 + SS2)/nu);

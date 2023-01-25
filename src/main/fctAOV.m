@@ -348,7 +348,7 @@ if numel(rmEffect)==0 & numel(indEffect)==1
 
     ph=multcompare(stats,"CriticalValueType",postHocType,"Display","off");
     [whichPH,order4ES.(condNames{1})]=findPH(allModalities{1});
-%     phNew=ph(whichPH,:);
+    %     phNew=ph(whichPH,:);
 
     phNew(:,1)=table(modalitiesInd{1}(ph(:,1)));
     phNew(:,2)=table(modalitiesInd{1}(ph(:,2)));
@@ -431,7 +431,7 @@ if numel(condNames)>2
 
                     [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond1} 'By' condNames{nCond2}]), {condNames{nCond3}}, {[condNames{nCond1} 'By' condNames{nCond2}]});
                     if any(nCond3==rmEffect)
-                        rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
+                        rm.WithinDesign.(condNames{rmEffect(find(nCond3==rmEffect))})=effectRMaov{find(nCond3==rmEffect)};
                     end
 
                     ph=multcompare(rm,[condNames{nCond1} 'By' condNames{nCond2}], 'By', condNames{nCond3}, 'ComparisonType',postHocType);
@@ -462,7 +462,12 @@ if numel(condNames)>2
                     elseif any(nCond1==rmEffect)
                         if numel(condNames)==3
                             [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond2} 'By' condNames{nCond3}]), {condNames{nCond1}}, {[condNames{nCond2} 'By' condNames{nCond3}]});
-                            rm.WithinDesign.(condNames{nCond1})=effectRMaov{1};
+                            rm.WithinDesign.(condNames{nCond1})=effectRMaov{find(nCond1==rmEffect)};
+
+                        else
+                            [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond2} 'By' condNames{nCond3}]), {condNames{rmEffect(1)}, condNames{rmEffect(2)}}, {[condNames{nCond2} 'By' condNames{nCond3}]});
+                            rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
+                            rm.WithinDesign.(condNames{rmEffect(2)})=effectRMaov{2};
                         end
                     end
                     ph=multcompare(rm,condNames{nCond1},'By', [condNames{nCond2} 'By' condNames{nCond3}], 'ComparisonType',postHocType);
@@ -1081,14 +1086,143 @@ end
 %% INTERACTIONS of RM
 % lines
 if ~isempty(rmEffect)
-if numel(effectRM)>1
-    if plotLines
+    if numel(effectRM)>1
+        if plotLines
+            for nRm1=1:numel(modalitiesRM)
+                for nRm2=1:numel(modalitiesRM)
+                    if nRm1~=nRm2
+
+                        f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
+
+                        for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
+
+                            varData=tXl(:,col4means{nRm1}(:,nModRm));
+                            dataMeans=nanmean(varData);
+                            dataSD=nanstd(varData);
+
+                            subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
+                            for x=1:numel(cond4effect{rmEffect(nRm1)})
+                                h=bar(x,dataMeans(x)); hold all
+                                h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
+
+                                if plotSD==1
+                                    if dataMeans(x)>=0
+                                        SD(1)=0;
+                                        SD(2)=dataSD(x);
+                                    else
+                                        SD(1)=dataSD(x);
+                                        SD(2)=0;
+                                    end
+                                    errorbar(x,dataMeans(x),SD(1),SD(2),'k','LineStyle','none')
+                                end
+
+                                if abs(dataMeans(x))<1
+                                    text(x,0.5*(dataMeans(x)),sprintf('%.3f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
+                                elseif abs(dataMeans(x))<10
+                                    text(x,0.5*(dataMeans(x)),sprintf('%.2f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
+                                elseif abs(dataMeans(x))<100
+                                    text(x,0.5*(dataMeans(x)),sprintf('%.1f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
+                                else
+                                    text(x,0.5*(dataMeans(x)),sprintf('%.0f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
+                                end
+                            end
+
+                            xticks(1:numel(cond4effect{rmEffect(nRm1)}))
+                            xticklabels(cond4effect{rmEffect(nRm1)})
+                            if nModRm==numel(cond4effect{rmEffect(nRm2)})
+                                xlabel(condNames{rmEffect(nRm1)})
+                            end
+                            ylabel(units)
+                            box off
+                            ax{nModRm}=gca;
+                            ax{nModRm}.XGrid='off';
+                            ax{nModRm}.YGrid='on';
+                            yl(:,nModRm)=ylim;
+                            title(cond4effect{rmEffect(nRm2)}{nModRm})
+
+                        end
+
+                        nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm1)} ':' condNames{rmEffect(nRm2)}]);
+                        nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm1)});
+                        pINT=aov{nAovInt,6};
+                        pMAIN=aov{nAov,6};
+
+                        amp=[max(max(yl))-min(min(yl))];
+                        for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
+
+                            varData=tXl(:,col4means{nRm1}(:,nModRm));
+
+                            isSignificant=0;
+                            set(f,'CurrentAxes',ax{nModRm});
+                            pValues=ones(1,size(postHoc.(condNames{rmEffect(nRm1)}),1));
+                            pSelected=0;
+                            if pINT<pcritical(1)
+                                isSignificant=1;
+                                phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
+                                pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                                pSelected=1;
+                            end
+                            %                         if pMAIN<pcritical(1) &  pSelected==0
+                            %                             isSignificant=1;
+                            %                             pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
+                            %                             pSelected=1;
+                            %                         end
+                            if pINT<pcritical(end) &  pSelected==0
+                                phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
+                                pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                                pSelected=1;
+                            end
+                            %                         if pMAIN<pcritical(end) &  pSelected==0
+                            %                             pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
+                            %                             pSelected=1;
+                            %                         end
+
+                            if pSelected==1
+                                nSignificant=1;
+                                for i=1:numel(pValues)
+                                    pV=pValues(i);
+                                    if pV<=pcritical(end)
+                                        if yl(2,nModRm)>0
+                                            if pV<pcritical(1) & isSignificant==1
+                                                hline(yl(2,nModRm)+0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                            else
+                                                hline(yl(2,nModRm)+0.05*nSignificant*amp,'linetype','--k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                            end
+                                        else
+                                            if pV<pcritical(1) & isSignificant==1
+                                                hline(yl(1,nModRm)-0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                            else
+                                                hline(yl(1,nModRm)-0.05*nSignificant*amp,'linetype','--k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                            end
+                                        end
+                                        nSignificant=nSignificant+1;
+                                    end
+                                end
+                            end
+
+                            yl(:,nModRm)=ylim;
+
+                        end
+
+                        for nModRm=1:numel(ax)
+                            set(ax{nModRm},'ylim',1.05*[min(min(yl)) max(max(yl))])
+                        end
+
+                        print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Lines', condNames{rmEffect(nRm1)}, ['All Participants by ' condNames{rmEffect(nRm2)}]))
+                        close
+                        clear ax yl dataMeans dataSD
+
+                    end
+                end
+            end
+        end
+
+        % text
         for nRm1=1:numel(modalitiesRM)
             for nRm2=1:numel(modalitiesRM)
                 if nRm1~=nRm2
 
                     f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
-
                     for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
 
                         varData=tXl(:,col4means{nRm1}(:,nModRm));
@@ -1146,6 +1280,11 @@ if numel(effectRM)>1
                     for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
 
                         varData=tXl(:,col4means{nRm1}(:,nModRm));
+                        dataMeans=nanmean(varData);
+                        dataSD=nanstd(varData);
+                        if plotSD==1
+                            dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                        end
 
                         isSignificant=0;
                         set(f,'CurrentAxes',ax{nModRm});
@@ -1157,37 +1296,43 @@ if numel(effectRM)>1
                             pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                             pSelected=1;
                         end
-                        %                         if pMAIN<pcritical(1) &  pSelected==0
-                        %                             isSignificant=1;
-                        %                             pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
-                        %                             pSelected=1;
-                        %                         end
+                        %                     if pMAIN<pcritical(1) &  pSelected==0
+                        %                         isSignificant=1;
+                        %                         pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
+                        %                         pSelected=1;
+                        %                     end
                         if pINT<pcritical(end) &  pSelected==0
                             phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
                             pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                             pSelected=1;
                         end
-                        %                         if pMAIN<pcritical(end) &  pSelected==0
-                        %                             pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
-                        %                             pSelected=1;
-                        %                         end
+                        %                     if pMAIN<pcritical(end) &  pSelected==0
+                        %                         pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
+                        %                         pSelected=1;
+                        %                     end
 
+                        nSignificant=1;
+                        nColSignificant=ones(1,numel(dataMeans));
                         if pSelected==1
-                            nSignificant=1;
                             for i=1:numel(pValues)
                                 pV=pValues(i);
                                 if pV<=pcritical(end)
-                                    if yl(2,nModRm)>0
-                                        if pV<pcritical(1) & isSignificant==1
-                                            hline(yl(2,nModRm)+0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                    if yl(2)>0
+                                        if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                            nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
+
                                         else
-                                            hline(yl(2,nModRm)+0.05*nSignificant*amp,'linetype','--k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                            nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                         end
                                     else
-                                        if pV<pcritical(1) & isSignificant==1
-                                            hline(yl(1,nModRm)-0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                        if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                            nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
                                         else
-                                            hline(yl(1,nModRm)-0.05*nSignificant*amp,'linetype','--k','xLimits',order4ES.(condNames{rmEffect(nRm1)})(i,:),'lineWidth',1.5);
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                            nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                         end
                                     end
                                     nSignificant=nSignificant+1;
@@ -1195,15 +1340,15 @@ if numel(effectRM)>1
                             end
                         end
 
-                        yl(:,nModRm)=ylim;
+                        yl(:,nModRm)=ylim*1.05.^max(nColSignificant);
 
                     end
 
                     for nModRm=1:numel(ax)
-                        set(ax{nModRm},'ylim',1.05*[min(min(yl)) max(max(yl))])
+                        set(ax{nModRm},'ylim',[min(min(yl)) max(max(yl))])
                     end
 
-                    print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Lines', condNames{rmEffect(nRm1)}, ['All Participants by ' condNames{rmEffect(nRm2)}]))
+                    print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Text', condNames{rmEffect(nRm1)}, ['All Participants by ' condNames{rmEffect(nRm2)}]))
                     close
                     clear ax yl dataMeans dataSD
 
@@ -1211,146 +1356,6 @@ if numel(effectRM)>1
             end
         end
     end
-
-    % text
-    for nRm1=1:numel(modalitiesRM)
-        for nRm2=1:numel(modalitiesRM)
-            if nRm1~=nRm2
-
-                f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
-                for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
-
-                    varData=tXl(:,col4means{nRm1}(:,nModRm));
-                    dataMeans=nanmean(varData);
-                    dataSD=nanstd(varData);
-
-                    subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
-                    for x=1:numel(cond4effect{rmEffect(nRm1)})
-                        h=bar(x,dataMeans(x)); hold all
-                        h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
-
-                        if plotSD==1
-                            if dataMeans(x)>=0
-                                SD(1)=0;
-                                SD(2)=dataSD(x);
-                            else
-                                SD(1)=dataSD(x);
-                                SD(2)=0;
-                            end
-                            errorbar(x,dataMeans(x),SD(1),SD(2),'k','LineStyle','none')
-                        end
-
-                        if abs(dataMeans(x))<1
-                            text(x,0.5*(dataMeans(x)),sprintf('%.3f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
-                        elseif abs(dataMeans(x))<10
-                            text(x,0.5*(dataMeans(x)),sprintf('%.2f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
-                        elseif abs(dataMeans(x))<100
-                            text(x,0.5*(dataMeans(x)),sprintf('%.1f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
-                        else
-                            text(x,0.5*(dataMeans(x)),sprintf('%.0f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
-                        end
-                    end
-
-                    xticks(1:numel(cond4effect{rmEffect(nRm1)}))
-                    xticklabels(cond4effect{rmEffect(nRm1)})
-                    if nModRm==numel(cond4effect{rmEffect(nRm2)})
-                        xlabel(condNames{rmEffect(nRm1)})
-                    end
-                    ylabel(units)
-                    box off
-                    ax{nModRm}=gca;
-                    ax{nModRm}.XGrid='off';
-                    ax{nModRm}.YGrid='on';
-                    yl(:,nModRm)=ylim;
-                    title(cond4effect{rmEffect(nRm2)}{nModRm})
-
-                end
-
-                nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm1)} ':' condNames{rmEffect(nRm2)}]);
-                nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm1)});
-                pINT=aov{nAovInt,6};
-                pMAIN=aov{nAov,6};
-
-                amp=[max(max(yl))-min(min(yl))];
-                for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
-
-                    varData=tXl(:,col4means{nRm1}(:,nModRm));
-                    dataMeans=nanmean(varData);
-                    dataSD=nanstd(varData);
-                    if plotSD==1
-                        dataMeans=dataMeans+sign(dataMeans).*dataSD;
-                    end
-
-                    isSignificant=0;
-                    set(f,'CurrentAxes',ax{nModRm});
-                    pValues=ones(1,size(postHoc.(condNames{rmEffect(nRm1)}),1));
-                    pSelected=0;
-                    if pINT<pcritical(1)
-                        isSignificant=1;
-                        phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
-                        pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
-                        pSelected=1;
-                    end
-                    %                     if pMAIN<pcritical(1) &  pSelected==0
-                    %                         isSignificant=1;
-                    %                         pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
-                    %                         pSelected=1;
-                    %                     end
-                    if pINT<pcritical(end) &  pSelected==0
-                        phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNames{rmEffect(nRm2)}){nModRm});
-                        pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
-                        pSelected=1;
-                    end
-                    %                     if pMAIN<pcritical(end) &  pSelected==0
-                    %                         pValues=postHoc.(condNames{rmEffect(nRm1)}){:,5};
-                    %                         pSelected=1;
-                    %                     end
-
-                    nSignificant=1;
-                    nColSignificant=ones(1,numel(dataMeans));
-                    if pSelected==1
-                        for i=1:numel(pValues)
-                            pV=pValues(i);
-                            if pV<=pcritical(end)
-                                if yl(2)>0
-                                    if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                        addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
-                                        nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
-
-                                    else
-                                        addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
-                                        nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
-                                    end
-                                else
-                                    if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                        addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
-                                        nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
-                                    else
-                                        addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
-                                        nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
-                                    end
-                                end
-                                nSignificant=nSignificant+1;
-                            end
-                        end
-                    end
-
-                    yl(:,nModRm)=ylim*1.05.^max(nColSignificant);
-
-                end
-
-                for nModRm=1:numel(ax)
-                    set(ax{nModRm},'ylim',[min(min(yl)) max(max(yl))])
-                end
-
-                print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Text', condNames{rmEffect(nRm1)}, ['All Participants by ' condNames{rmEffect(nRm2)}]))
-                close
-                clear ax yl dataMeans dataSD
-
-            end
-        end
-    end
-end
 end
 
 %% Main RM with simple IND interaction

@@ -350,13 +350,13 @@ if numel(rmEffect)==0 & numel(indEffect)==1
     [whichPH,order4ES.(condNames{1})]=findPH(allModalities{1});
 %     phNew=ph(whichPH,:);
 
-    phNew2(:,1)=table(modalitiesInd{1}(ph(:,1)));
-    phNew2(:,2)=table(modalitiesInd{1}(ph(:,2)));
-    phNew2(:,3)=table(ph(:,3));
-    phNew2(:,4)=table(ph(:,4));
-    phNew2(:,5)=table(ph(:,6));
-    phNew2.Properties.VariableNames={[condNames{1} '_1'], [condNames{1} '_2'], 'Difference', 'StdErr', 'pValue'};
-    postHoc.(condNames{1})=phNew2;
+    phNew(:,1)=table(modalitiesInd{1}(ph(:,1)));
+    phNew(:,2)=table(modalitiesInd{1}(ph(:,2)));
+    phNew(:,3)=table(ph(:,3));
+    phNew(:,4)=table(ph(:,4));
+    phNew(:,5)=table(ph(:,6));
+    phNew.Properties.VariableNames={[condNames{1} '_1'], [condNames{1} '_2'], 'Difference', 'StdErr', 'pValue'};
+    postHoc.(condNames{1})=phNew;
 
 else
 
@@ -431,7 +431,7 @@ if numel(condNames)>2
 
                     [tbl,rm]=mixed_anova(data4stats,indInt2.([condNames{nCond1} 'By' condNames{nCond2}]), {condNames{nCond3}}, {[condNames{nCond1} 'By' condNames{nCond2}]});
                     if any(nCond3==rmEffect)
-                        rm.WithinDesign.(condNames{rmEffect(1)})=effectRMaov{1};
+                        rm.WithinDesign.(condNames{rmEffect(find(nCond3==rmEffect))})=effectRMaov{find(nCond3==rmEffect)};
                     end
 
                     ph=multcompare(rm,[condNames{nCond1} 'By' condNames{nCond2}], 'By', condNames{nCond3}, 'ComparisonType',postHocType);
