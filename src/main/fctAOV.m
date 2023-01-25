@@ -1053,18 +1053,18 @@ if ~isempty(rmEffect)
                 if pV<=pcritical(end)
                     if yl(2)>0
                         if abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2)))
-                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))+0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
+                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))+0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
                             nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))+1;
                         else
-                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))+0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
+                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))+0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
                             nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))+1;
                         end
                     else
                         if abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2)))
-                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))-0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
+                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))-0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
                             nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))+1;
                         else
-                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))-0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
+                            addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))-0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
                             nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))+1;
                         end
                     end
@@ -1319,19 +1319,19 @@ if ~isempty(rmEffect)
                                 if pV<=pcritical(end)
                                     if yl(2)>0
                                         if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
 
                                         else
-                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                         end
                                     else
                                         if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
                                         else
-                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                         end
                                     end
@@ -1574,19 +1574,19 @@ if ~isempty(rmEffect) & numel(indEffect)>0
                         if pV<=pcritical(end)
                             if yl(2)>0
                                 if abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2)))
-                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))+0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
+                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))+0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
                                     nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))+1;
                                 else
-                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))+0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
+                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))+0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
                                     nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))+1;
 
                                 end
                             else
                                 if abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2)))
-                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))-0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
+                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))-0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
                                     nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))+1;
                                 else
-                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))-0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
+                                    addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))-0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
                                     nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))+1;
                                 end
                             end
@@ -1910,19 +1910,19 @@ if numel(rmEffect)>0 & numel(indEffect)>1
                                     if pV<=pcritical(end)
                                         if yl(2)>0
                                             if abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2)))
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))+0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))+0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))+1;
                                             else
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))+0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))+0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))+1;
 
                                             end
                                         else
                                             if abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2)))
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))-0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,1))-0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,2),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,1))+1;
                                             else
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))-0.05*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm)})(i,2))-0.055*nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNames{rmEffect(nRm)})(i,1),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm)})(i,2))+1;
                                             end
                                         end
@@ -2260,19 +2260,19 @@ if numel(rmEffect)>1 & numel(indEffect)>0
                                     if pV<=pcritical(end)
                                         if yl(2)>0
                                             if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
 
                                             else
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                             end
                                         else
                                             if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
                                             else
-                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                                addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
                                                 nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                             end
                                         end
@@ -2368,8 +2368,8 @@ if numel(rmEffect)>1 & numel(indEffect)>1
 
                                         for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
 
-                                            dataMeans=nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
-                                            dataSD=nanstd(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
+                                            dataMeans=nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nModInd1}).(allMod.(condNames{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
+                                            dataSD=nanstd(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nModInd1}).(allMod.(condNames{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
 
                                             if plotSD==1
                                                 dataMeans=dataMeans+sign(dataMeans).*dataSD;
@@ -2509,8 +2509,8 @@ if numel(rmEffect)>1 & numel(indEffect)>1
                                     amp=[max(max(yl))-min(min(yl))];
                                     for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
 
-                                        dataMeans=nanmean(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
-                                        dataSD=nanstd(data4plot.(condNames{indEffect(nInd)}).(allMod.(condNames{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
+                                        dataMeans=nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nModInd1}).(allMod.(condNames{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
+                                        dataSD=nanstd(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nModInd1}).(allMod.(condNames{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
 
                                         if plotSD==1
                                             dataMeans=dataMeans+sign(dataMeans).*dataSD;
@@ -2550,19 +2550,19 @@ if numel(rmEffect)>1 & numel(indEffect)>1
                                                 if pV<=pcritical(end)
                                                     if yl(2)>0
                                                         if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
                                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
 
                                                         else
-                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
                                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                                         end
                                                     else
                                                         if abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2)))
-                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
+                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,2),:))
                                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,1))+1;
                                                         else
-                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.022*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
+                                                            addPvalue(order4ES.(condNames{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNames{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNames{rmEffect(nRm1)})(i,1),:))
                                                             nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNames{rmEffect(nRm1)})(i,2))+1;
                                                         end
                                                     end
@@ -2776,19 +2776,19 @@ if numel(indEffect)>0
                 if pV<=pcritical(end)
                     if yl(2)>0
                         if abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2)))
-                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
+                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))+0.055*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
                             nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))+1;
                         else
-                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
+                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))+0.055*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
                             nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))+1;
 
                         end
                     else
                         if abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2)))
-                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
+                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))-0.055*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
                             nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))+1;
                         else
-                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
+                            addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))-0.055*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
                             nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))+1;
                         end
                     end
@@ -3055,19 +3055,19 @@ if numel(indEffect)>0 & numel(rmEffect)>0
                         if pV<=pcritical(end)
                             if yl(2)>0
                                 if abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2)))
-                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
+                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))+0.0225*numel(allMod.(condNames{rmEffect(nRm)}))*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
                                     nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))+1;
                                 else
-                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
+                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))+0.0225*numel(allMod.(condNames{rmEffect(nRm)}))*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
                                     nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))+1;
 
                                 end
                             else
                                 if abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2)))
-                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
+                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,1))-0.0225*numel(allMod.(condNames{rmEffect(nRm)}))*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,2),:))
                                     nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,1))+1;
                                 else
-                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
+                                    addPvalue(order4ES.(condNames{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd)})(i,2))-0.0225*numel(allMod.(condNames{rmEffect(nRm)}))*nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNames{indEffect(nInd)})(i,1),:))
                                     nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd)})(i,2))+1;
                                 end
                             end
@@ -3344,18 +3344,18 @@ if numel(indEffect)>1
                             if pV<=pcritical(end)
                                 if yl(2)>0
                                     if abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2)))
-                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
+                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
                                         nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))+1;
                                     else
-                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
+                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
                                         nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))+1;
                                     end
                                 else
                                     if abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2)))
-                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
+                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
                                         nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))+1;
                                     else
-                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
+                                        addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
                                         nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))+1;
                                     end
                                 end
@@ -3399,6 +3399,7 @@ if numel(indEffect)>1 & numel(rmEffect)>0
                                     dataMeans(nMod1)=nanmean(nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nMod1}).(allMod.(condNames{indEffect(nInd2)}){nMod2})(:,col4means{nRm}(nModRm,:)),2));
                                     dataSD(nMod1)=nanstd(nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNames{indEffect(nInd1)}){nMod1}).(allMod.(condNames{indEffect(nInd2)}){nMod2})(:,col4means{nRm}(nModRm,:)),2));
                                 end
+
 
                                 for x=1:numel(modalitiesInd{nInd1})
 
@@ -3725,19 +3726,19 @@ if numel(indEffect)>1 & numel(rmEffect)>0
                                     if pV<=pcritical(end)
                                         if yl(2)>0
                                             if abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2)))
-                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
+                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
                                                 nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))+1;
                                             else
-                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))+0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
+                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
                                                 nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))+1;
 
                                             end
                                         else
                                             if abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2)))
-                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
+                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,1))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,2),:))
                                                 nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,1))+1;
                                             else
-                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))-0.05*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
+                                                addPvalue(order4ES.(condNames{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNames{indEffect(nInd1)})(i,2))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNames{indEffect(nInd1)})(i,1),:))
                                                 nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNames{indEffect(nInd1)})(i,2))+1;
                                             end
                                         end
