@@ -374,10 +374,8 @@ if numel(rmEffect)==0 & numel(indEffect)==1
 
     phNew(:,1)=table(modalitiesInd{1}(ph(:,1)));
     phNew(:,2)=table(modalitiesInd{1}(ph(:,2)));
-    phNew(:,3)=table(ph(:,3));
-    phNew(:,4)=table(ph(:,4));
-    phNew(:,5)=table(ph(:,6));
-    phNew.Properties.VariableNames={[condNamesVerif{1} '_1'], [condNamesVerif{1} '_2'], 'Difference', 'StdErr', 'pValue'};
+    phNew(:,3)=table(ph(:,6));
+    phNew.Properties.VariableNames={[condNamesVerif{1} '_1'], [condNamesVerif{1} '_2'], 'pValue'};
     postHoc.(condNamesVerif{1})=phNew;
 
 else
