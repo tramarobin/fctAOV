@@ -968,7 +968,7 @@ if ~isempty(saveDir)
                 ax.XGrid='off';
                 ax.YGrid='on';
 
-                nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm)});
+                nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
                 pMAIN=aov{nAov,6};
 
                 amp=[max(yl)-min(yl)];
@@ -1073,7 +1073,7 @@ if ~isempty(saveDir)
             ax.XGrid='off';
             ax.YGrid='on';
 
-            nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm)});
+            nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
             pMAIN=aov{nAov,6};
 
             amp=[max(yl)-min(yl)];
@@ -1198,7 +1198,7 @@ if ~isempty(saveDir)
                             end
 
                             nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm1)} ':' condNames{rmEffect(nRm2)}]);
-                            nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm1)});
+                            nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm1)}));
                             pINT=aov{nAovInt,6};
                             pMAIN=aov{nAov,6};
 
@@ -1335,7 +1335,7 @@ if ~isempty(saveDir)
                         end
 
                         nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm1)} ':' condNames{rmEffect(nRm2)}]);
-                        nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm1)});
+                        nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm1)}));
                         pINT=aov{nAovInt,6};
                         pMAIN=aov{nAov,6};
 
@@ -1482,7 +1482,7 @@ if ~isempty(saveDir)
                         ax.YGrid='on';
 
                         nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd)} ':' condNames{rmEffect(nRm)}]);
-                        nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm)});
+                        nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
                         pINT=aov{nAovInt,6};
                         pMAIN=aov{nAov,6};
 
@@ -1611,7 +1611,7 @@ if ~isempty(saveDir)
                     ax.YGrid='on';
 
                     nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd)} ':' condNames{rmEffect(nRm)}]);
-                    nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm)});
+                    nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
                     pINT=aov{nAovInt,6};
                     pMAIN=aov{nAov,6};
 
@@ -1760,7 +1760,7 @@ if ~isempty(saveDir)
                                     if isempty(nAovInt)
                                         nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nInd2)} ':' condNames{indEffect(nRm)}]);
                                     end
-                                    nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm)});
+                                    nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
                                     pINT3=aov{nAovInt3,6};
                                     pINT2=aov{nAovInt2,6};
                                     pINT=aov{nAovInt,6};
@@ -1934,7 +1934,7 @@ if ~isempty(saveDir)
                                 %                             if isempty(nAovInt)
                                 %                                 nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nInd2)} ':' condNames{indEffect(nRm)}]);
                                 %                             end
-                                %                             nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm)});
+                                %                             nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)});
                                 pINT3=aov{nAovInt3,6};
                                 %                             pINT2=aov{nAovInt2,6};
                                 %                             pINT=aov{nAovInt,6};
@@ -2118,7 +2118,7 @@ if ~isempty(saveDir)
                                     nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm2)} ':' condNames{rmEffect(nRm1)}]);
                                 end
 
-                                nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm1)});
+                                nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm1)}));
                                 pINT3=aov{nAovInt3,6};
                                 pINT2=aov{nAovInt2,6};
                                 pINT=aov{nAovInt,6};
@@ -2295,7 +2295,7 @@ if ~isempty(saveDir)
                             if isempty(nAovInt)
                                 nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm2)} ':' condNames{rmEffect(nRm1)}]);
                             end
-                            nAov=findcolExact(aov.Effect,condNames{rmEffect(nRm1)});
+                            nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm1)}));
                             pINT3=aov{nAovInt3,6};
                             pINT2=aov{nAovInt2,6};
                             pINT=aov{nAovInt,6};
@@ -2767,7 +2767,7 @@ if ~isempty(saveDir)
                 ax.XGrid='off';
                 ax.YGrid='on';
 
-                nAov=findcolExact(aov.Effect,condNames{indEffect(nInd)});
+                nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd)}));
                 pMAIN=aov{nAov,6};
 
                 amp=[max(yl)-min(yl)];
@@ -2871,7 +2871,7 @@ if ~isempty(saveDir)
                 dataMeans=dataMeans+sign(dataMeans).*dataSD;
             end
 
-            nAov=findcolExact(aov.Effect,condNames{indEffect(nInd)});
+            nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd)}));
             pMAIN=aov{nAov,6};
             if iscell(pMAIN)
                 pMAIN=pMAIN{1};
@@ -2989,7 +2989,7 @@ if ~isempty(saveDir)
                     end
 
                     nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd)} ':' condNames{rmEffect(nRm)}]);
-                    nAov=findcolExact(aov.Effect,condNames{indEffect(nInd)});
+                    nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd)}));
                     pINT=aov{nAovInt,6};
                     pMAIN=aov{nAov,6};
 
@@ -3126,7 +3126,7 @@ if ~isempty(saveDir)
                 end
 
                 nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd)} ':' condNames{rmEffect(nRm)}]);
-                nAov=findcolExact(aov.Effect,condNames{indEffect(nInd)});
+                nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd)}));
                 pINT=aov{nAovInt,6};
                 pMAIN=aov{nAov,6};
 
@@ -3277,7 +3277,7 @@ if ~isempty(saveDir)
                         if isempty(nAovInt)
                             nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd2)} ':' condNames{indEffect(nInd1)}]);
                         end
-                        nAov=findcolExact(aov.Effect,condNames{indEffect(nInd1)});
+                        nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd1)}));
                         pINT=aov{nAovInt,6};
                         pMAIN=aov{nAov,6};
 
@@ -3416,7 +3416,7 @@ if ~isempty(saveDir)
                     if isempty(nAovInt)
                         nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd2)} ':' condNames{indEffect(nInd1)}]);
                     end
-                    nAov=findcolExact(aov.Effect,condNames{indEffect(nInd1)});
+                    nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd1)}));
                     pINT=aov{nAovInt,6};
                     pMAIN=aov{nAov,6};
 
@@ -3578,7 +3578,7 @@ if ~isempty(saveDir)
                                     nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd1)} ':' condNames{rmEffect(nRm)}]);
                                 end
 
-                                nAov=findcolExact(aov.Effect,condNames{indEffect(nInd1)});
+                                nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd1)}));
                                 pINT3=aov{nAovInt3,6};
                                 pINT2=aov{nAovInt2,6};
                                 pINT=aov{nAovInt,6};
@@ -3766,7 +3766,7 @@ if ~isempty(saveDir)
                                 nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd1)} ':' condNames{rmEffect(nRm)}]);
                             end
 
-                            nAov=findcolExact(aov.Effect,condNames{indEffect(nInd1)});
+                            nAov=findcolExact(aov.Effect, verifFieldName(condNames{indEffect(nInd1)}));
                             pINT3=aov{nAovInt3,6};
                             pINT2=aov{nAovInt2,6};
                             pINT=aov{nAovInt,6};
