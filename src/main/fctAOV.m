@@ -1047,9 +1047,8 @@ if ~isempty(saveDir)
                                     scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
                                 end
                             end
+							clear selectIndivLines
                         end
-                        clear selectIndivLines
-
                         xlim(xlp)
                         xticks(1:numel(modalitiesRM{nRm}))
                         xticklabels(modalitiesRM{nRm})
@@ -1204,8 +1203,8 @@ if ~isempty(saveDir)
                                 scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
                             end
                         end
+						clear selectIndivLines
                     end
-                    clear selectIndivLines
                     xlim(xlp)
                     xticks(1:numel(modalitiesRM{nRm}))
                     xticklabels(modalitiesRM{nRm})
