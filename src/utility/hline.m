@@ -2,7 +2,7 @@ function hline(y,varargin)
 
 p = inputParser;
 addParameter(p,'displayLegend',0,@isnumeric); % if 0, not displayed in legend
-addParameter(p,'linetype',':k',@ischar);
+addParameter(p,'linetype','--k',@ischar);
 addParameter(p,'label','',@ischar);
 addParameter(p,'xLimits',[],@isnumeric);
 addParameter(p,'lineWidth',1,@isnumeric);

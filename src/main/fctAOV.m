@@ -14,9 +14,9 @@ unpackStruct(display)
 %% Statistical names and order based on the names
 % modalities
 for nCond=1:numel(condNames)
-condNamesVerif{nCond}=verifFieldName(condNames{nCond});
+    condNamesVerif{nCond}=verifFieldName(condNames{nCond});
 end
-    loopRm=1;
+loopRm=1;
 for nCond=1:numel(cond4effect)
     allModalities{nCond}=unique(cond4effect{nCond},'stable');
     allMod.(condNamesVerif{nCond})=unique(cond4effect{nCond},'stable');
@@ -163,7 +163,7 @@ else
 
 end
 % nan the subjects with issues
-tXl(isnan(mean(tXl,2)),:)=nan;
+% tXl(isnan(mean(tXl,2)),:)=nan;
 tXL(:,1)=table([ID(1:numSub); nan]);
 for nInd=1:numel(indEffect)
     tXL(:,nInd+1)=table([cond4effect{indEffect(nInd)}(1:numSub); nan]);
@@ -217,6 +217,9 @@ for i=1:numel(condNames4Table)
     tXLmeans(3,numel(indEffect)+1+i)=table(nan);
 end
 data4plot.allData=tXl;
+if ~isempty(findcol(fieldnames(stats),"addUnivariate"))
+    data4plot.allData(:,end)=[];
+end
 loop=4;
 if numel(indEffect)>0
     for nInd1=1:numel(indEffect)
@@ -226,7 +229,7 @@ if numel(indEffect)>0
                 tXLmeans(loop+1,numel(indEffect)+1+i)=table(nanstd(tXl(idxIndependantEffect(:,nInd1)==nMod1,i)));
                 tXLmeans(loop+2,numel(indEffect)+1+i)=table(nan);
             end
-            data4plot.(condNamesVerif{[indEffect(nInd1)]}).(allModalities{[indEffect(nInd1)]}{nMod1})=tXl(idxIndependantEffect(:,nInd1)==nMod1,:);
+            data4plot.(condNamesVerif{[indEffect(nInd1)]}).(allModalities{[indEffect(nInd1)]}{nMod1})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1,:);
             loop=loop+3;
         end
     end
@@ -242,9 +245,9 @@ if numel(indEffect)>1
                             tXLmeans(loop+1,numel(indEffect)+1+i)=table(nanstd(tXl(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,i)));
                             tXLmeans(loop+2,numel(indEffect)+1+i)=table(nan);
                         end
-                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).([allModalities{[indEffect(nInd1)]}{nMod1} allModalities{[indEffect(nInd2)]}{nMod2}])=tXl(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
-                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).(allModalities{[indEffect(nInd1)]}{nMod1}).(allModalities{indEffect(nInd2)}{nMod2})=tXl(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
-                        data4plot.([condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd1)]}]).(allModalities{[indEffect(nInd2)]}{nMod2}).(allModalities{indEffect(nInd1)}{nMod1})=tXl(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
+                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).([allModalities{[indEffect(nInd1)]}{nMod1} allModalities{[indEffect(nInd2)]}{nMod2}])=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
+                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).(allModalities{[indEffect(nInd1)]}{nMod1}).(allModalities{indEffect(nInd2)}{nMod2})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
+                        data4plot.([condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd1)]}]).(allModalities{[indEffect(nInd2)]}{nMod2}).(allModalities{indEffect(nInd1)}{nMod1})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
                         loop=loop+3;
                     end
                 end
@@ -267,7 +270,7 @@ if numel(indEffect)>2
                                         tXLmeans(loop+2,numel(indEffect)+1+i)=table(nan);
                                     end
                                     loop=loop+3;
-                                    data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd3)]}]).([allModalities{[indEffect(nInd1)]}{nMod1} allModalities{[indEffect(nInd2)]}{nMod2} allModalities{[indEffect(nInd3)]}{nMod3}])=tXl(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2 & idxIndependantEffect(:,nInd3)==nMod3,:);
+                                    data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd3)]}]).([allModalities{[indEffect(nInd1)]}{nMod1} allModalities{[indEffect(nInd2)]}{nMod2} allModalities{[indEffect(nInd3)]}{nMod3}])=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2 & idxIndependantEffect(:,nInd3)==nMod3,:);
                                 end
                             end
                         end
@@ -898,6 +901,21 @@ end
 
 %% PLOT
 if ~isempty(saveDir)
+
+    if ~isempty(findcol(fieldnames(stats),"addUnivariate"))
+        for nRm=1:numel(modalitiesRM)
+            modalitiesRM{nRm}(end)=[];
+            allMod.(condNamesVerif{rmEffect(nRm)})(end)=[];
+            maxN=numel(modalitiesRM{nRm})+1;
+            for n=1:size(order4ES.(condNamesVerif{rmEffect(nRm)}),1)
+                ESmax=max(order4ES.(condNamesVerif{rmEffect(nRm)})(n,:));
+                if ESmax==maxN
+                    order4ES.(condNamesVerif{rmEffect(nRm)})(n,2)=order4ES.(condNamesVerif{rmEffect(nRm)})(n,1);
+                end
+            end
+        end
+    end
+
     for nCond=1:numel(condNames)
         if statsLines
             mkdir(fullfile(saveDir, 'Lines', condNames{nCond}))
@@ -921,7 +939,7 @@ if ~isempty(saveDir)
 
                 for x=1:numel(modalitiesRM{nRm})
 
-                    h=bar(x,dataMeans(x)); hold all
+                    h=bar(x,dataMeans(x)); hold on
                     h(1).FaceColor=colors{rmEffect(nRm)}(x,:);
 
                     if plotSD==1
@@ -941,7 +959,7 @@ if ~isempty(saveDir)
                     for xx=1:numel(modalitiesRM{nRm})
                         dataLines(:,xx)=nanmean(data4plot.allData(:,col4means{nRm}(xx,:)),2);
                     end
-                    plot(xl,dataLines,'k--'); hold all
+                    plot(xl,dataLines,'k--'); hold on
                     scatter(xl,dataLines,'k+')
                 end
                 clear dataLines
@@ -1011,6 +1029,44 @@ if ~isempty(saveDir)
 
                 print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Lines', condNames{rmEffect(nRm)}, 'All participants'))
                 close
+
+                if indivLines==2
+                    for nInd=1:numel(indEffect)
+                        f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*1.5*numel(modalitiesRM{nRm})],'visible','off');
+                        for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
+                            for xl=1:numel(modalitiesRM{nRm})
+                                selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                            end
+                            xl=1:numel(modalitiesRM{nRm});
+                            for n=1:size(selectIndivLines,1)
+                                if n==1
+                                    plot(xl,selectIndivLines(n,:),'color', colors{indEffect(nInd)}(nMod,:),'linewidth',1.05,'linestyle','-'); hold on
+                                    scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                                else
+                                    plot(xl,selectIndivLines(n,:),'color', colors{indEffect(nInd)}(nMod,:),'linewidth',1.05,'linestyle','-', 'handlevisibility','off'); hold on
+                                    scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                                end
+                            end
+                        end
+                        clear selectIndivLines
+
+                        xlim(xlp)
+                        xticks(1:numel(modalitiesRM{nRm}))
+                        xticklabels(modalitiesRM{nRm})
+                        xlabel(condNames{rmEffect(nRm)})
+                        ylabel(units)
+                        yl=ylim;
+                        box off
+                        ax=gca;
+                        ax.XGrid='off';
+                        ax.YGrid='on';
+                        legend(allModalities{indEffect(nInd)}, "box", "off", "Location", "northeast");
+
+                        print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Lines', condNames{rmEffect(nRm)}, ['All Participants and ' condNames{indEffect(nInd)}]))
+                        close
+                    end
+                end
+
                 clear ax yl dataMeans dataSD
             end
         end
@@ -1026,7 +1082,7 @@ if ~isempty(saveDir)
 
             for x=1:numel(modalitiesRM{nRm})
 
-                h=bar(x,dataMeans(x)); hold all
+                h=bar(x,dataMeans(x)); hold on
                 h(1).FaceColor=colors{rmEffect(nRm)}(x,:);
 
                 if plotSD==1
@@ -1046,7 +1102,7 @@ if ~isempty(saveDir)
                 for xx=1:numel(modalitiesRM{nRm})
                     dataLines(:,xx)=nanmean(data4plot.allData(:,col4means{nRm}(xx,:)),2);
                 end
-                plot(xl,dataLines,'k--'); hold all
+                plot(xl,dataLines,'k--'); hold on
                 scatter(xl,dataLines,'k+')
             end
             clear dataLines
@@ -1125,8 +1181,49 @@ if ~isempty(saveDir)
             yl=yl*1.05.^max(nColSignificant);
             set(ax,'ylim',[min(yl) max(yl)])
 
+            xlp=xlim;
+
             print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Text', condNames{rmEffect(nRm)}, 'All participants'))
             close
+
+            if indivLines==2
+                for nInd=1:numel(indEffect)
+                    f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*1.5*numel(modalitiesRM{nRm})],'visible','off');
+                    for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
+                        for xl=1:numel(modalitiesRM{nRm})
+                            selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                        end
+                        hline(0, 'xLimits',[0 (numel(modalitiesRM{nRm})+1)],'linetype','-k', 'linewidth',0.5)
+                        xl=1:numel(modalitiesRM{nRm});
+                        for n=1:size(selectIndivLines,1)
+                            if n==1
+                                plot(xl,selectIndivLines(n,:),'color', colors{indEffect(nInd)}(nMod,:),'linewidth',1.05,'linestyle','-'); hold on
+                                scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                            else
+                                plot(xl,selectIndivLines(n,:),'color', colors{indEffect(nInd)}(nMod,:),'linewidth',1.05,'linestyle','-', 'handlevisibility','off'); hold on
+                                scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                            end
+                        end
+                    end
+                    clear selectIndivLines
+                    xlim(xlp)
+                    xticks(1:numel(modalitiesRM{nRm}))
+                    xticklabels(modalitiesRM{nRm})
+                    xlabel(condNames{rmEffect(nRm)})
+                    ylabel(units)
+                    yl=ylim;
+                    ylim([-max(abs(yl)) max(abs(yl))])
+                    box off
+                    ax=gca;
+                    ax.XGrid='off';
+                    ax.YGrid='on';
+                    legend(allModalities{indEffect(nInd)}, "box", "off", "Location", "northeast");
+
+                    print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Text', condNames{rmEffect(nRm)}, ['All Participants and ' condNames{indEffect(nInd)}]))
+                    close
+                end
+            end
+
             clear ax yl dataMeans dataSD
 
         end
@@ -1151,7 +1248,7 @@ if ~isempty(saveDir)
 
                                 subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
                                 for x=1:numel(cond4effect{rmEffect(nRm1)})
-                                    h=bar(x,dataMeans(x)); hold all
+                                    h=bar(x,dataMeans(x)); hold on
                                     h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
 
                                     if plotSD==1
@@ -1167,7 +1264,7 @@ if ~isempty(saveDir)
                                 end
                                 if indivLines==1
                                     xl=1:numel(modalitiesRM{nRm1});
-                                    plot(xl,varData,'k--'); hold all
+                                    plot(xl,varData,'k--'); hold on
                                     scatter(xl,varData,'k+')
                                 end
                                 for x=1:numel(cond4effect{rmEffect(nRm1)})
@@ -1286,7 +1383,7 @@ if ~isempty(saveDir)
 
                             subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
                             for x=1:numel(cond4effect{rmEffect(nRm1)})
-                                h=bar(x,dataMeans(x)); hold all
+                                h=bar(x,dataMeans(x)); hold on
                                 h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
 
                                 if plotSD==1
@@ -1303,7 +1400,7 @@ if ~isempty(saveDir)
 
                             if indivLines==1
                                 xl=1:numel(modalitiesRM{nRm1});
-                                plot(xl,varData,'k--'); hold all
+                                plot(xl,varData,'k--'); hold on
                                 scatter(xl,varData,'k+')
                             end
 
@@ -1438,7 +1535,7 @@ if ~isempty(saveDir)
 
                         for x=1:numel(modalitiesRM{nRm})
 
-                            h=bar(x,dataMeans(x)); hold all
+                            h=bar(x,dataMeans(x)); hold on
                             h(1).FaceColor=colors{rmEffect(nRm)}(x,:);
 
                             if plotSD==1
@@ -1454,10 +1551,14 @@ if ~isempty(saveDir)
                         end
 
                         if indivLines==1
+                            for xl=1:numel(modalitiesRM{nRm})
+                                selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                            end
                             xl=1:numel(modalitiesRM{nRm});
-                            plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k--'); hold all
-                            scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k+')
+                            plot(xl,selectIndivLines,'k--'); hold on
+                            scatter(xl,selectIndivLines,'k+')
                         end
+                        clear selectIndivLines
 
                         for x=1:numel(modalitiesRM{nRm})
                             if abs(dataMeans(x))<1
@@ -1567,7 +1668,7 @@ if ~isempty(saveDir)
 
                     for x=1:numel(modalitiesRM{nRm})
 
-                        h=bar(x,dataMeans(x)); hold all
+                        h=bar(x,dataMeans(x)); hold on
                         h(1).FaceColor=colors{rmEffect(nRm)}(x,:);
 
                         if plotSD==1
@@ -1583,10 +1684,14 @@ if ~isempty(saveDir)
                     end
 
                     if indivLines==1
+                        for xl=1:numel(modalitiesRM{nRm})
+                            selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                        end
                         xl=1:numel(modalitiesRM{nRm});
-                        plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k--'); hold all
-                        scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k+')
+                        plot(xl,selectIndivLines,'k--'); hold on
+                        scatter(xl,selectIndivLines,'k+')
                     end
+                    clear selectIndivLines
 
                     for x=1:numel(modalitiesRM{nRm})
                         if abs(dataMeans(x))<1
@@ -1707,7 +1812,7 @@ if ~isempty(saveDir)
 
                                     for x=1:numel(modalitiesRM{nRm})
 
-                                        h=bar(x,dataMeans(x)); hold all
+                                        h=bar(x,dataMeans(x)); hold on
                                         h(1).FaceColor=colors{rmEffect(nRm)}(x,:);
 
                                         if plotSD==1
@@ -1723,7 +1828,7 @@ if ~isempty(saveDir)
 
                                         if indivLines==1
                                             xl=1:numel(modalitiesRM{nRm});
-                                            plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k--'); hold all
+                                            plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k--'); hold on
                                             scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k+')
                                         end
 
@@ -1879,7 +1984,7 @@ if ~isempty(saveDir)
 
                                 for x=1:numel(modalitiesRM{nRm})
 
-                                    h=bar(x,dataMeans(x)); hold all
+                                    h=bar(x,dataMeans(x)); hold on
                                     h(1).FaceColor=colors{rmEffect(nRm)}(x,:);
 
                                     if plotSD==1
@@ -1896,7 +2001,7 @@ if ~isempty(saveDir)
 
                                 if indivLines==1
                                     xl=1:numel(modalitiesRM{nRm});
-                                    plot(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nMod1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nMod2})(:,col4means{nRm}),'k--'); hold all
+                                    plot(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nMod1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nMod2})(:,col4means{nRm}),'k--'); hold on
                                     scatter(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nMod1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nMod2})(:,col4means{nRm}),'k+')
                                 end
 
@@ -2057,7 +2162,7 @@ if ~isempty(saveDir)
 
                                     subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
                                     for x=1:numel(cond4effect{rmEffect(nRm1)})
-                                        h=bar(x,dataMeans(x)); hold all
+                                        h=bar(x,dataMeans(x)); hold on
                                         h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
 
                                         if plotSD==1
@@ -2074,7 +2179,7 @@ if ~isempty(saveDir)
 
                                     if indivLines==1
                                         xl=1:numel(modalitiesRM{nRm1});
-                                        plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k--'); hold all
+                                        plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
                                         scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k+')
                                     end
 
@@ -2235,7 +2340,7 @@ if ~isempty(saveDir)
                                 subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
 
                                 for x=1:numel(cond4effect{rmEffect(nRm1)})
-                                    h=bar(x,dataMeans(x)); hold all
+                                    h=bar(x,dataMeans(x)); hold on
                                     h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
 
                                     if plotSD==1
@@ -2251,9 +2356,9 @@ if ~isempty(saveDir)
                                 end
 
                                 if indivLines==1
-                                    xl=1:numel(modalitiesRM{nRm});
-                                    plot(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nMod1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nMod2})(:,col4means{nRm}),'k--'); hold all
-                                    scatter(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nMod1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nMod2})(:,col4means{nRm}),'k+')
+                                    xl=1:numel(modalitiesRM{nRm1});
+                                    plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
+                                    scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k+')
                                 end
 
                                 for x=1:numel(cond4effect{rmEffect(nRm1)})
@@ -2430,7 +2535,7 @@ if ~isempty(saveDir)
 
                                                 subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
                                                 for x=1:numel(cond4effect{rmEffect(nRm1)})
-                                                    h=bar(x,dataMeans(x)); hold all
+                                                    h=bar(x,dataMeans(x)); hold on
                                                     h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
 
                                                     if plotSD==1
@@ -2447,7 +2552,7 @@ if ~isempty(saveDir)
 
                                                 if indivLines==1
                                                     xl=1:numel(modalitiesRM{nRm});
-                                                    plot(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)),'k--'); hold all
+                                                    plot(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
                                                     scatter(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)),'k+')
                                                 end
 
@@ -2580,7 +2685,7 @@ if ~isempty(saveDir)
 
                                             subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
                                             for x=1:numel(cond4effect{rmEffect(nRm1)})
-                                                h=bar(x,dataMeans(x)); hold all
+                                                h=bar(x,dataMeans(x)); hold on
                                                 h(1).FaceColor=colors{rmEffect(nRm1)}(x,:);
 
                                                 if plotSD==1
@@ -2596,7 +2701,7 @@ if ~isempty(saveDir)
 
                                                 if indivLines==1
                                                     xl=1:numel(modalitiesRM{nRm});
-                                                    plot(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)),'k--'); hold all
+                                                    plot(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
                                                     scatter(xl,data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)),'k+')
                                                 end
 
@@ -2732,7 +2837,7 @@ if ~isempty(saveDir)
 
                 for x=1:numel(modalitiesInd{nInd})
 
-                    h=bar(x,dataMeans(x)); hold all
+                    h=bar(x,dataMeans(x)); hold on
                     h(1).FaceColor=colors{indEffect(nInd)}(x,:);
 
                     if plotSD==1
@@ -2744,6 +2849,10 @@ if ~isempty(saveDir)
                             SD(2)=0;
                         end
                         errorbar(x,dataMeans(x),SD(1),SD(2),'k','LineStyle','none')
+                    end
+
+                    if indivLines==1
+                        scatter(x,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x}),2), 'kx' ,'handlevisibility','off')
                     end
 
                     if abs(dataMeans(x))<1
@@ -2815,6 +2924,37 @@ if ~isempty(saveDir)
 
                 print('-dtiff',['-r' num2str(imageResolution)], fullfile(saveDir, 'Lines', condNames{indEffect(nInd)}, 'All RM'))
                 close
+
+
+                if indivLines==2
+                    f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
+                    hline(0, 'xLimits',[0 (numel(modalitiesRM{nRm})+1)],'linetype','-k', 'linewidth',0.5); hold on
+                    for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
+                        for n=1:size(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),1)
+                            if n==1
+                                scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','on')
+                            else
+                                scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                            end
+                        end
+                    end
+                    xlim(xlp)
+                    xticks(1:numel(allMod.(condNamesVerif{indEffect(nInd)})))
+                    xticklabels(allMod.(condNamesVerif{indEffect(nInd)}))
+                    xlabel(condNames{indEffect(nInd)})
+                    ylabel(units)
+                    yl=ylim;
+                    ylim([-max(abs(yl)) max(abs(yl))])
+                    box off
+                    ax=gca;
+                    ax.XGrid='off';
+                    ax.YGrid='on';
+                    legend(allModalities{indEffect(nInd)}, "box", "off", "Location", "northeast");
+
+                    print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Lines', condNames{indEffect(nInd)}, 'All RM and indiv'))
+                    close
+                end
+
                 clear ax yl dataMeans dataSD
 
             end
@@ -2832,7 +2972,7 @@ if ~isempty(saveDir)
 
             for x=1:numel(modalitiesInd{nInd})
 
-                h=bar(x,dataMeans(x)); hold all
+                h=bar(x,dataMeans(x)); hold on
                 h(1).FaceColor=colors{indEffect(nInd)}(x,:);
 
                 if plotSD==1
@@ -2844,6 +2984,10 @@ if ~isempty(saveDir)
                         SD(2)=0;
                     end
                     errorbar(x,dataMeans(x),SD(1),SD(2),'k','LineStyle','none')
+                end
+
+                if indivLines==1
+                    scatter(x,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x}),2), 'kx' ,'handlevisibility','off')
                 end
 
                 if abs(dataMeans(x))<1
@@ -2921,12 +3065,42 @@ if ~isempty(saveDir)
 
             yl=yl*1.05.^max(nColSignificant);
             set(ax,'ylim',[min(yl) max(yl)])
+            xlp=xlim;
 
             print('-dtiff',['-r' num2str(imageResolution)], fullfile(saveDir, 'text', condNames{indEffect(nInd)}, 'All RM'))
             close
-            clear ax yl dataMeans dataSD
 
+            if indivLines==2
+                f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
+                hline(0, 'xLimits',[0 (numel(modalitiesRM{nRm})+1)],'linetype','-k', 'linewidth',0.5); hold on
+                for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
+                    for n=1:size(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),1)
+                        if n==1
+                            scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','on')
+                        else
+                            scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                        end
+                    end
+                end
+                xlim(xlp)
+                xticks(1:numel(allMod.(condNamesVerif{indEffect(nInd)})))
+                xticklabels(allMod.(condNamesVerif{indEffect(nInd)}))
+                xlabel(condNames{indEffect(nInd)})
+                ylabel(units)
+                yl=ylim;
+                ylim([-max(abs(yl)) max(abs(yl))])
+                box off
+                ax=gca;
+                ax.XGrid='off';
+                ax.YGrid='on';
+                legend(allModalities{indEffect(nInd)}, "box", "off", "Location", "northeast");
+
+                print('-dtiff',['-r' num2str(imageResolution)],fullfile(saveDir, 'Text', condNames{indEffect(nInd)}, 'All RM and indiv'))
+                close
+            end
         end
+        clear ax yl dataMeans dataSD
+
     end
 
     % 1 IND 1RM
@@ -2949,7 +3123,7 @@ if ~isempty(saveDir)
 
                         for x=1:numel(modalitiesInd{nInd})
 
-                            h=bar(x,dataMeans(x)); hold all
+                            h=bar(x,dataMeans(x)); hold on
                             h(1).FaceColor=colors{indEffect(nInd)}(x,:);
 
                             if plotSD==1
@@ -3086,7 +3260,7 @@ if ~isempty(saveDir)
 
                     for x=1:numel(modalitiesInd{nInd})
 
-                        h=bar(x,dataMeans(x)); hold all
+                        h=bar(x,dataMeans(x)); hold on
                         h(1).FaceColor=colors{indEffect(nInd)}(x,:);
 
                         if plotSD==1
@@ -3175,14 +3349,13 @@ if ~isempty(saveDir)
                         for i=1:numel(pValues)
                             pV=pValues(i);
                             if pV<=pcritical(end)
-                                if yl(2)>0
-                                    if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2)))
+                                if yl(2,nMod)>0
+                                    if (dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1)))>(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2)))
                                         addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))+0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,2),:))
                                         nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))+1;
                                     else
                                         addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))+0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,1),:))
                                         nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))+1;
-
                                     end
                                 else
                                     if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2)))
@@ -3233,7 +3406,7 @@ if ~isempty(saveDir)
 
                             for x=1:numel(modalitiesInd{nInd1})
 
-                                h=bar(x,dataMeans(x)); hold all
+                                h=bar(x,dataMeans(x)); hold on
                                 h(1).FaceColor=colors{indEffect(nInd1)}(x,:);
 
                                 if plotSD==1
@@ -3372,7 +3545,7 @@ if ~isempty(saveDir)
 
                         for x=1:numel(modalitiesInd{nInd1})
 
-                            h=bar(x,dataMeans(x)); hold all
+                            h=bar(x,dataMeans(x)); hold on
                             h(1).FaceColor=colors{indEffect(nInd1)}(x,:);
 
                             if plotSD==1
@@ -3525,7 +3698,7 @@ if ~isempty(saveDir)
 
                                     for x=1:numel(modalitiesInd{nInd1})
 
-                                        h=bar(x,dataMeans(x)); hold all
+                                        h=bar(x,dataMeans(x)); hold on
                                         h(1).FaceColor=colors{indEffect(nInd1)}(x,:);
 
                                         if plotSD==1
@@ -3713,7 +3886,7 @@ if ~isempty(saveDir)
 
                                 for x=1:numel(modalitiesInd{nInd1})
 
-                                    h=bar(x,dataMeans(x)); hold all
+                                    h=bar(x,dataMeans(x)); hold on
                                     h(1).FaceColor=colors{indEffect(nInd1)}(x,:);
 
                                     if plotSD==1
