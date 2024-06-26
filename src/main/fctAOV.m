@@ -19,6 +19,7 @@ end
 loopRm=1;
 for nCond=1:numel(cond4effect)
     allModalities{nCond}=unique(cond4effect{nCond},'stable');
+    allModalitiesVerif{nCond}=verifFieldName(allModalities{nCond});
     allMod.(condNamesVerif{nCond})=unique(cond4effect{nCond},'stable');
 end
 
@@ -214,7 +215,7 @@ for i=1:numel(condNames4Table)
     tXL(:,numel(indEffect)+1+i)=table([tXl(:,i); nan]);
     tXLmeans(1,numel(indEffect)+1+i)=table(nanmean(tXl(:,i)));
     tXLmeans(2,numel(indEffect)+1+i)=table(nanstd(tXl(:,i)));
-    tXLmeans(3,numel(indEffect)+1+i)=table(nan);
+    tXLmeans(3:end,numel(indEffect)+1+i)=table(nan);
 end
 data4plot.allData=tXl;
 if ~isempty(findcol(fieldnames(stats),"addUnivariate"))
@@ -229,7 +230,7 @@ if numel(indEffect)>0
                 tXLmeans(loop+1,numel(indEffect)+1+i)=table(nanstd(tXl(idxIndependantEffect(:,nInd1)==nMod1,i)));
                 tXLmeans(loop+2,numel(indEffect)+1+i)=table(nan);
             end
-            data4plot.(condNamesVerif{[indEffect(nInd1)]}).(allModalities{[indEffect(nInd1)]}{nMod1})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1,:);
+            data4plot.(condNamesVerif{[indEffect(nInd1)]}).(allModalitiesVerif{[indEffect(nInd1)]}{nMod1})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1,:);
             loop=loop+3;
         end
     end
@@ -245,9 +246,9 @@ if numel(indEffect)>1
                             tXLmeans(loop+1,numel(indEffect)+1+i)=table(nanstd(tXl(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,i)));
                             tXLmeans(loop+2,numel(indEffect)+1+i)=table(nan);
                         end
-                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).([allModalities{[indEffect(nInd1)]}{nMod1} allModalities{[indEffect(nInd2)]}{nMod2}])=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
-                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).(allModalities{[indEffect(nInd1)]}{nMod1}).(allModalities{indEffect(nInd2)}{nMod2})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
-                        data4plot.([condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd1)]}]).(allModalities{[indEffect(nInd2)]}{nMod2}).(allModalities{indEffect(nInd1)}{nMod1})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
+                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).([allModalitiesVerif{[indEffect(nInd1)]}{nMod1} allModalitiesVerif{[indEffect(nInd2)]}{nMod2}])=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
+                        data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]}]).(allModalitiesVerif{[indEffect(nInd1)]}{nMod1}).(allModalitiesVerif{indEffect(nInd2)}{nMod2})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
+                        data4plot.([condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd1)]}]).(allModalitiesVerif{[indEffect(nInd2)]}{nMod2}).(allModalitiesVerif{indEffect(nInd1)}{nMod1})=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2,:);
                         loop=loop+3;
                     end
                 end
@@ -270,7 +271,7 @@ if numel(indEffect)>2
                                         tXLmeans(loop+2,numel(indEffect)+1+i)=table(nan);
                                     end
                                     loop=loop+3;
-                                    data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd3)]}]).([allModalities{[indEffect(nInd1)]}{nMod1} allModalities{[indEffect(nInd2)]}{nMod2} allModalities{[indEffect(nInd3)]}{nMod3}])=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2 & idxIndependantEffect(:,nInd3)==nMod3,:);
+                                    data4plot.([condNamesVerif{[indEffect(nInd1)]} 'By' condNamesVerif{[indEffect(nInd2)]} 'By' condNamesVerif{[indEffect(nInd3)]}]).([allModalitiesVerif{[indEffect(nInd1)]}{nMod1} allModalitiesVerif{[indEffect(nInd2)]}{nMod2} allModalitiesVerif{[indEffect(nInd3)]}{nMod3}])=data4plot.allData(idxIndependantEffect(:,nInd1)==nMod1 & idxIndependantEffect(:,nInd2)==nMod2 & idxIndependantEffect(:,nInd3)==nMod3,:);
                                 end
                             end
                         end
@@ -298,7 +299,7 @@ else
 end
 
 if numel(rmEffect)==0 & numel(indEffect)==1
-    [p,tbl,stats]=anova1(data4stats,idxIndependantEffect,'off');
+    [p,tbl,statsAOV]=anova1(data4stats,idxIndependantEffect,'off');
 end
 
 if numel(rmEffect)==1 & numel(indEffect)==0
@@ -371,7 +372,7 @@ end
 %% 1 effect
 if numel(rmEffect)==0 & numel(indEffect)==1
 
-    ph=multcompare(stats,"CriticalValueType",postHocType,"Display","off");
+    ph=multcompare(statsAOV,"CriticalValueType",postHocType,"Display","off");
     [whichPH,order4ES.(condNamesVerif{1})]=findPH(allModalities{1});
     %     phNew=ph(whichPH,:);
 
@@ -607,6 +608,7 @@ for nCond=1:numel(rmEffect)
     for i=1:numel(cond4effect{rmEffect(nCond)})
         tempTableMeans(1,numel(indEffect)+1+i)=table(nanmean(means(:,i)));
         tempTableMeans(2,numel(indEffect)+1+i)=table(nanstd(means(:,i)));
+        tempTableMeans(3,numel(indEffect)+1+i)=table(nan);
     end
 
     % adding independant effect in tables
@@ -883,11 +885,16 @@ end
 %% SAVING TABLES
 fieldNames4SavePH=fieldnames(postHoc);
 fieldNames4SaveMeans=fieldnames(tablemeans);
+
+tablemeans=AOVreformTable(tablemeans, stats, allMod, aov);
+
 Tables.means=tablemeans;
 Tables.aov=aov;
 Tables.posthoc=postHoc;
+
+
 if ~isempty(saveDir)
-    writetable(aov,fullfile(saveDir, 'Tables.xlsx'),"Sheet",'AOV')
+    writetable(aov,fullfile(saveDir, 'Tables.xlsx'),"Sheet",'AOV','WriteMode', 'replacefile')
     for i=1:numel(fieldNames4SaveMeans)
         writetable(tablemeans.(fieldNames4SaveMeans{i}),fullfile(saveDir, 'Tables.xlsx'),"Sheet",['MEANS_' fieldNames4SaveMeans{i}])
     end
@@ -1009,7 +1016,7 @@ if ~isempty(saveDir)
                     for i=1:numel(pValues)
                         pV=pValues(i);
                         if pV<=pcritical(end)
-                            if yl(2)>0
+                            if abs(yl(2))>abs(yl(1))
                                 if pV<pcritical(1) & isSignificant==1
                                     hline(yl(2)+0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNamesVerif{rmEffect(nRm)})(i,:),'lineWidth',1.5);
                                 else
@@ -1035,7 +1042,7 @@ if ~isempty(saveDir)
                         f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*1.5*numel(modalitiesRM{nRm})],'visible','off');
                         for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
                             for xl=1:numel(modalitiesRM{nRm})
-                                selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                                selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(xl,:)),2);
                             end
                             xl=1:numel(modalitiesRM{nRm});
                             for n=1:size(selectIndivLines,1)
@@ -1047,7 +1054,7 @@ if ~isempty(saveDir)
                                     scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
                                 end
                             end
-							clear selectIndivLines
+                            clear selectIndivLines
                         end
                         xlim(xlp)
                         xticks(1:numel(modalitiesRM{nRm}))
@@ -1104,6 +1111,14 @@ if ~isempty(saveDir)
                 plot(xl,dataLines,'k--'); hold on
                 scatter(xl,dataLines,'k+')
             end
+
+            dataMeans4pv=dataMeans;
+            if plotSD==1
+                dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
+            end
+            if indivLines==1
+                dataMeans4pv=abs(max(dataLines)).*sign(dataMeans);
+            end
             clear dataLines
 
             for x=1:numel(modalitiesRM{nRm})
@@ -1155,7 +1170,7 @@ if ~isempty(saveDir)
                 for i=1:numel(pValues)
                     pV=pValues(i);
                     if pV<=pcritical(end)
-                        if yl(2)>0
+                        if abs(yl(2))>abs(yl(1))
                             if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2)))
                                 addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1), yl(2)+0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2),:))
                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))+1;
@@ -1190,7 +1205,7 @@ if ~isempty(saveDir)
                     f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*1.5*numel(modalitiesRM{nRm})],'visible','off');
                     for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
                         for xl=1:numel(modalitiesRM{nRm})
-                            selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                            selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(xl,:)),2);
                         end
                         hline(0, 'xLimits',[0 (numel(modalitiesRM{nRm})+1)],'linetype','-k', 'linewidth',0.5)
                         xl=1:numel(modalitiesRM{nRm});
@@ -1203,7 +1218,7 @@ if ~isempty(saveDir)
                                 scatter(xl,selectIndivLines(n,:), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
                             end
                         end
-						clear selectIndivLines
+                        clear selectIndivLines
                     end
                     xlim(xlp)
                     xticks(1:numel(modalitiesRM{nRm}))
@@ -1293,8 +1308,11 @@ if ~isempty(saveDir)
 
                             end
 
-                            nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm1)} ':' condNames{rmEffect(nRm2)}]);
-                            nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm1)}));
+                            nAovInt=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nRm1)} ':' condNamesVerif{rmEffect(nRm2)}]);
+                            if isempty(nAovInt)
+                                nAovInt=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nRm2)} ':' condNamesVerif{rmEffect(nRm1)}]);
+                            end
+                            nAov=findcolExact(aov.Effect, verifFieldName(condNamesVerif{rmEffect(nRm1)}));
                             pINT=aov{nAovInt,6};
                             pMAIN=aov{nAov,6};
 
@@ -1309,8 +1327,8 @@ if ~isempty(saveDir)
                                 pSelected=0;
                                 if pINT<pcritical(1)
                                     isSignificant=1;
-                                    phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
-                                    pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                                    phCut=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                    pValues=postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){phCut,6};
                                     pSelected=1;
                                 end
                                 %                         if pMAIN<pcritical(1) &  pSelected==0
@@ -1319,8 +1337,8 @@ if ~isempty(saveDir)
                                 %                             pSelected=1;
                                 %                         end
                                 if pINT<pcritical(end) &  pSelected==0
-                                    phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
-                                    pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                                    phCut=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                    pValues=postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){phCut,6};
                                     pSelected=1;
                                 end
                                 %                         if pMAIN<pcritical(end) &  pSelected==0
@@ -1430,8 +1448,11 @@ if ~isempty(saveDir)
 
                         end
 
-                        nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm1)} ':' condNames{rmEffect(nRm2)}]);
-                        nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm1)}));
+                        nAovInt=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nRm1)} ':' condNamesVerif{rmEffect(nRm2)}]);
+                        if isempty(nAovInt)
+                            nAovInt=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nRm2)} ':' condNamesVerif{rmEffect(nRm1)}]);
+                        end
+                        nAov=findcolExact(aov.Effect, verifFieldName(condNamesVerif{rmEffect(nRm1)}));
                         pINT=aov{nAovInt,6};
                         pMAIN=aov{nAov,6};
 
@@ -1441,8 +1462,12 @@ if ~isempty(saveDir)
                             varData=tXl(:,col4means{nRm1}(:,nModRm));
                             dataMeans=nanmean(varData);
                             dataSD=nanstd(varData);
+                            dataMeans4pv=dataMeans;
                             if plotSD==1
-                                dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                                dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
+                            end
+                            if indivLines==1
+                                dataMeans4pv=abs(max(varData)).*sign(dataMeans);
                             end
 
                             isSignificant=0;
@@ -1451,8 +1476,8 @@ if ~isempty(saveDir)
                             pSelected=0;
                             if pINT<pcritical(1)
                                 isSignificant=1;
-                                phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
-                                pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                                phCut=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                pValues=postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){phCut,6};
                                 pSelected=1;
                             end
                             %                     if pMAIN<pcritical(1) &  pSelected==0
@@ -1461,8 +1486,8 @@ if ~isempty(saveDir)
                             %                         pSelected=1;
                             %                     end
                             if pINT<pcritical(end) &  pSelected==0
-                                phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
-                                pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
+                                phCut=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){:,1},allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                pValues=postHoc.([condNamesVerif{rmEffect(nRm1)} 'By' condNamesVerif{rmEffect(nRm2)}]){phCut,6};
                                 pSelected=1;
                             end
                             %                     if pMAIN<pcritical(end) &  pSelected==0
@@ -1476,21 +1501,20 @@ if ~isempty(saveDir)
                                 for i=1:numel(pValues)
                                     pV=pValues(i);
                                     if pV<=pcritical(end)
-                                        if yl(2)>0
+                                        if abs(yl(2))>abs(yl(1))
                                             if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2)))
-                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
+                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+1;
-
                                             else
-                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
+                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+1;
                                             end
                                         else
                                             if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2)))
-                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
+                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+1;
                                             else
-                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
+                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+1;
                                             end
                                         end
@@ -1528,8 +1552,8 @@ if ~isempty(saveDir)
                         f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
                         for x=1:numel(modalitiesRM{nRm})
-                            dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(x,:)),2));
-                            dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(x,:)),2));
+                            dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(x,:)),2));
+                            dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(x,:)),2));
                         end
 
                         for x=1:numel(modalitiesRM{nRm})
@@ -1551,7 +1575,7 @@ if ~isempty(saveDir)
 
                         if indivLines==1
                             for xl=1:numel(modalitiesRM{nRm})
-                                selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                                selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(xl,:)),2);
                             end
                             xl=1:numel(modalitiesRM{nRm});
                             plot(xl,selectIndivLines,'k--'); hold on
@@ -1581,8 +1605,8 @@ if ~isempty(saveDir)
                         ax.XGrid='off';
                         ax.YGrid='on';
 
-                        nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd)} ':' condNames{rmEffect(nRm)}]);
-                        nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
+                        nAovInt=findcolExact(aov.Effect,[condNamesVerif{indEffect(nInd)} ':' condNamesVerif{rmEffect(nRm)}]);
+                        nAov=findcolExact(aov.Effect, verifFieldName(condNamesVerif{rmEffect(nRm)}));
                         pINT=aov{nAovInt,6};
                         pMAIN=aov{nAov,6};
 
@@ -1593,8 +1617,8 @@ if ~isempty(saveDir)
                         pSelected=0;
                         if pINT<pcritical(1)
                             isSignificant=1;
-                            rows=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
-                            pValues=postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){rows,6};
+                            rows=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                            pValues=postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){rows,6};
                             pSelected=1;
                         end
                         %                     if pMAIN<pcritical(1) &  pSelected==0
@@ -1603,8 +1627,8 @@ if ~isempty(saveDir)
                         %                         pSelected=1;
                         %                     end
                         if pINT<pcritical(end) &  pSelected==0
-                            rows=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
-                            pValues=postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){rows,6};
+                            rows=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                            pValues=postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){rows,6};
                             pSelected=1;
                         end
                         %                     if pMAIN<pcritical(end) &  pSelected==0
@@ -1622,7 +1646,7 @@ if ~isempty(saveDir)
                             for i=1:numel(pValues)
                                 pV=pValues(i);
                                 if pV<=pcritical(end)
-                                    if yl(2)>0
+                                    if abs(yl(2))>abs(yl(1))
                                         if pV<pcritical(1) & isSignificant==1
                                             hline(yl(2)+0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNamesVerif{rmEffect(nRm)})(i,:),'lineWidth',1.5);
                                         else
@@ -1661,8 +1685,8 @@ if ~isempty(saveDir)
                     f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesRM{nRm}) 4+9/16*4*numel(modalitiesRM{nRm})],'visible','off');
 
                     for x=1:numel(modalitiesRM{nRm})
-                        dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(x,:)),2));
-                        dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(x,:)),2));
+                        dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(x,:)),2));
+                        dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(x,:)),2));
                     end
 
                     for x=1:numel(modalitiesRM{nRm})
@@ -1684,7 +1708,7 @@ if ~isempty(saveDir)
 
                     if indivLines==1
                         for xl=1:numel(modalitiesRM{nRm})
-                            selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}(xl,:)),2);
+                            selectIndivLines(:,xl)=mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}(xl,:)),2);
                         end
                         xl=1:numel(modalitiesRM{nRm});
                         plot(xl,selectIndivLines,'k--'); hold on
@@ -1714,7 +1738,7 @@ if ~isempty(saveDir)
                     ax.XGrid='off';
                     ax.YGrid='on';
 
-                    nAovInt=findcolExact(aov.Effect,[condNames{indEffect(nInd)} ':' condNames{rmEffect(nRm)}]);
+                    nAovInt=findcolExact(aov.Effect,[condNamesVerif{indEffect(nInd)} ':' condNamesVerif{rmEffect(nRm)}]);
                     nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
                     pINT=aov{nAovInt,6};
                     pMAIN=aov{nAov,6};
@@ -1726,8 +1750,8 @@ if ~isempty(saveDir)
                     pSelected=0;
                     if pINT<pcritical(1)
                         isSignificant=1;
-                        rows=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
-                        pValues=postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){rows,6};
+                        rows=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                        pValues=postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){rows,6};
                         pSelected=1;
                     end
                     %                 if pMAIN<pcritical(1) &  pSelected==0
@@ -1736,8 +1760,8 @@ if ~isempty(saveDir)
                     %                     pSelected=1;
                     %                 end
                     if pINT<pcritical(end) &  pSelected==0
-                        rows=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
-                        pValues=postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd)}]){rows,6};
+                        rows=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){:,1},allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                        pValues=postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd)}]){rows,6};
                         pSelected=1;
                     end
                     %                 if pMAIN<pcritical(end) &  pSelected==0
@@ -1755,7 +1779,7 @@ if ~isempty(saveDir)
                         for i=1:numel(pValues)
                             pV=pValues(i);
                             if pV<=pcritical(end)
-                                if yl(2)>0
+                                if abs(yl(2))>abs(yl(1))
                                     if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2)))
                                         addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1), yl(2)+0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2),:))
                                         nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))+1;
@@ -1827,8 +1851,8 @@ if ~isempty(saveDir)
 
                                         if indivLines==1
                                             xl=1:numel(modalitiesRM{nRm});
-                                            plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k--'); hold on
-                                            scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm}),'k+')
+                                            plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}),'k--'); hold on
+                                            scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm}),'k+')
                                         end
 
                                         if abs(dataMeans(x))<1
@@ -1852,17 +1876,17 @@ if ~isempty(saveDir)
                                     ax.XGrid='off';
                                     ax.YGrid='on';
 
-                                    nAovInt3=findcolExact(aov.Effect,[condNames{indEffect(nInd1)} ':' condNames{indEffect(nInd2)} ':' condNames{rmEffect(nRm)}]);
+                                    nAovInt3=findcolExact(aov.Effect,[condNamesVerif{indEffect(nInd1)} ':' condNamesVerif{indEffect(nInd2)} ':' condNamesVerif{rmEffect(nRm)}]);
                                     if isempty(nAovInt3)
-                                        nAovInt3=findComboStrings(aov.Effect,{condNames{indEffect(nInd1)}, condNames{indEffect(nInd2)}, condNames{rmEffect(nRm)}});
+                                        nAovInt3=findComboStrings(aov.Effect,{condNamesVerif{indEffect(nInd1)}, condNamesVerif{indEffect(nInd2)}, condNamesVerif{rmEffect(nRm)}});
                                     end
-                                    nAovInt2=findcolExact(aov.Effect,[condNames{rmEffect(nRm)} ':' condNames{indEffect(nInd1)}]);
+                                    nAovInt2=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nRm)} ':' condNamesVerif{indEffect(nInd1)}]);
                                     if isempty(nAovInt2)
-                                        nAovInt2=findcolExact(aov.Effect,[condNames{rmEffect(nInd1)} ':' condNames{indEffect(nRm)}]);
+                                        nAovInt2=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nInd1)} ':' condNamesVerif{indEffect(nRm)}]);
                                     end
-                                    nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nRm)} ':' condNames{indEffect(nInd2)}]);
+                                    nAovInt=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nRm)} ':' condNamesVerif{indEffect(nInd2)}]);
                                     if isempty(nAovInt)
-                                        nAovInt=findcolExact(aov.Effect,[condNames{rmEffect(nInd2)} ':' condNames{indEffect(nRm)}]);
+                                        nAovInt=findcolExact(aov.Effect,[condNamesVerif{rmEffect(nInd2)} ':' condNamesVerif{indEffect(nRm)}]);
                                     end
                                     nAov=findcolExact(aov.Effect, verifFieldName(condNames{rmEffect(nRm)}));
                                     pINT3=aov{nAovInt3,6};
@@ -1877,10 +1901,10 @@ if ~isempty(saveDir)
                                     pSelected=0;
                                     if pINT3<pcritical(1)
                                         isSignificant=1;
-                                        phCut1=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1},allMod.(condNamesVerif{indEffect(nInd1)}){nMod1});
-                                        phCut2=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,2},allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                        phCut1=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd1)} 'By' condNamesVerif{indEffect(nInd2)}]){:,1},allMod.(condNamesVerif{indEffect(nInd1)}){nMod1});
+                                        phCut2=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd1)} 'By' condNamesVerif{indEffect(nInd2)}]){:,2},allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                         phCut=intersect(phCut1, phCut2);
-                                        pValues=postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,7};
+                                        pValues=postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd1)} 'By' condNamesVerif{indEffect(nInd2)}]){phCut,7};
                                         pSelected=1;
                                     end
                                     %                                 if any([pINT<pcritical(1) pINT2<pcritical(1)]) &  pSelected==0
@@ -1900,10 +1924,10 @@ if ~isempty(saveDir)
                                     %                                     pSelected=1;
                                     %                                 end
                                     if pINT3<pcritical(end) &  pSelected==0
-                                        phCut1=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1},allMod.(condNamesVerif{indEffect(nInd1)}){nMod1});
-                                        phCut2=findcolExact(postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,2},allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                        phCut1=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd1)} 'By' condNamesVerif{indEffect(nInd2)}]){:,1},allMod.(condNamesVerif{indEffect(nInd1)}){nMod1});
+                                        phCut2=findcolExact(postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd1)} 'By' condNamesVerif{indEffect(nInd2)}]){:,2},allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                         phCut=intersect(phCut1, phCut2);
-                                        pValues=postHoc.([condNames{rmEffect(nRm)} 'By' condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,7};
+                                        pValues=postHoc.([condNamesVerif{rmEffect(nRm)} 'By' condNamesVerif{indEffect(nInd1)} 'By' condNamesVerif{indEffect(nInd2)}]){phCut,7};
                                         pSelected=1;
                                     end
                                     %                                 if any([pINT<pcritical(end) pINT2<pcritical(end)]) &  pSelected==0
@@ -1931,7 +1955,7 @@ if ~isempty(saveDir)
                                         for i=1:numel(pValues)
                                             pV=pValues(i);
                                             if pV<=pcritical(end)
-                                                if yl(2)>0
+                                                if abs(yl(2))>abs(yl(1))
                                                     if pV<pcritical(1) & isSignificant==1
                                                         hline(yl(2)+0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNamesVerif{rmEffect(nRm)})(i,:),'lineWidth',1.5);
                                                     else
@@ -2105,7 +2129,7 @@ if ~isempty(saveDir)
                                     for i=1:numel(pValues)
                                         pV=pValues(i);
                                         if pV<=pcritical(end)
-                                            if yl(2)>0
+                                            if abs(yl(2))>abs(yl(1))
                                                 if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2)))
                                                     addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1), yl(2)+0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2),:))
                                                     nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))+1;
@@ -2156,8 +2180,8 @@ if ~isempty(saveDir)
                                 f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
 
                                 for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
-                                    dataMeans=nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
-                                    dataSD=nanstd(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
+                                    dataMeans=nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)));
+                                    dataSD=nanstd(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)));
 
                                     subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
                                     for x=1:numel(cond4effect{rmEffect(nRm1)})
@@ -2178,8 +2202,8 @@ if ~isempty(saveDir)
 
                                     if indivLines==1
                                         xl=1:numel(modalitiesRM{nRm1});
-                                        plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
-                                        scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k+')
+                                        plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
+                                        scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)),'k+')
                                     end
 
                                     for x=1:numel(cond4effect{rmEffect(nRm1)})
@@ -2247,10 +2271,10 @@ if ~isempty(saveDir)
                                     %                                     isSignificant=1;
                                     %                                     pSelected=1;
                                     %                                     if pINT<pINT2
-                                    %                                         phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
                                     %                                         pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                                     %                                     else
-                                    %                                         phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
                                     %                                         pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){phCut,6};
                                     %                                     end
                                     %                                 end
@@ -2269,10 +2293,10 @@ if ~isempty(saveDir)
                                     %                                 if any([pINT<pcritical(end) pINT2<pcritical(end)]) &  pSelected==0
                                     %                                     pSelected=1;
                                     %                                     if pINT<pINT2
-                                    %                                         phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
                                     %                                         pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                                     %                                     else
-                                    %                                         phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
                                     %                                         pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){phCut,6};
                                     %                                     end
                                     %                                 end
@@ -2333,8 +2357,8 @@ if ~isempty(saveDir)
                             f=figure('units','centimeters','position',[0 0 6+4*numel(allModalities{rmEffect(nRm1)}) 4+numel(cond4effect{rmEffect(nRm2)})*numel(cond4effect{rmEffect(nRm1)})*9/16*4],'visible','off');
 
                             for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
-                                dataMeans=nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
-                                dataSD=nanstd(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
+                                dataMeans=nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)));
+                                dataSD=nanstd(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)));
 
                                 subplot(numel(cond4effect{rmEffect(nRm2)}),1,nModRm);
 
@@ -2356,8 +2380,8 @@ if ~isempty(saveDir)
 
                                 if indivLines==1
                                     xl=1:numel(modalitiesRM{nRm1});
-                                    plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
-                                    scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)),'k+')
+                                    plot(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)),'k--'); hold on
+                                    scatter(xl,data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)),'k+')
                                 end
 
                                 for x=1:numel(cond4effect{rmEffect(nRm1)})
@@ -2408,11 +2432,15 @@ if ~isempty(saveDir)
                             amp=[max(max(yl))-min(min(yl))];
                             for nModRm=1:numel(cond4effect{rmEffect(nRm2)})
 
-                                dataMeans=nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
-                                dataSD=nanstd(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(:,col4means{nRm1}(:,nModRm)));
+                                dataMeans=nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)));
+                                dataSD=nanstd(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)));
 
+                                dataMeans4pv=dataMeans;
                                 if plotSD==1
-                                    dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                                    dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
+                                end
+                                if indivLines==1
+                                    dataMeans4pv=abs(max(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans);
                                 end
 
                                 isSignificant=0;
@@ -2431,10 +2459,10 @@ if ~isempty(saveDir)
                                 %                                 isSignificant=1;
                                 %                                 pSelected=1;
                                 %                                 if pINT<pINT2
-                                %                                     phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                %                                     phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
                                 %                                     pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                                 %                                 else
-                                %                                     phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                                %                                     phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
                                 %                                     pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){phCut,6};
                                 %                                 end
                                 %                             end
@@ -2453,10 +2481,10 @@ if ~isempty(saveDir)
                                 %                             if any([pINT<pcritical(end) pINT2<pcritical(end)]) &  pSelected==0
                                 %                                 pSelected=1;
                                 %                                 if pINT<pINT2
-                                %                                     phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
+                                %                                     phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm2)}){nModRm});
                                 %                                     pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{rmEffect(nRm2)}]){phCut,6};
                                 %                                 else
-                                %                                     phCut=findcol(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
+                                %                                     phCut=findcolExact(postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd)}){nMod});
                                 %                                     pValues=postHoc.([condNames{rmEffect(nRm1)} 'By' condNames{indEffect(nInd)}]){phCut,6};
                                 %                                 end
                                 %                             end
@@ -2471,21 +2499,20 @@ if ~isempty(saveDir)
                                     for i=1:numel(pValues)
                                         pV=pValues(i);
                                         if pV<=pcritical(end)
-                                            if yl(2)>0
+                                            if abs(yl(2))>abs(yl(1))
                                                 if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2)))
-                                                    addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
+                                                    addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
                                                     nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+1;
-
                                                 else
                                                     addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
                                                     nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+1;
                                                 end
                                             else
                                                 if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2)))
-                                                    addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
+                                                    addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
                                                     nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+1;
                                                 else
-                                                    addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
+                                                    addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
                                                     nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+1;
                                                 end
                                             end
@@ -2739,8 +2766,12 @@ if ~isempty(saveDir)
                                             dataMeans=nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
                                             dataSD=nanstd(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)));
 
+                                            dataMeans4pv=dataMeans;
                                             if plotSD==1
-                                                dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                                                dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
+                                            end
+                                            if indivLines==1
+                                                dataMeans4pv=abs(max(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans);
                                             end
 
                                             isSignificant=0;
@@ -2775,21 +2806,20 @@ if ~isempty(saveDir)
                                                 for i=1:numel(pValues)
                                                     pV=pValues(i);
                                                     if pV<=pcritical(end)
-                                                        if yl(2)>0
+                                                        if abs(yl(2))>abs(yl(1))
                                                             if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2)))
-                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
+                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
                                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+1;
-
                                                             else
-                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
+                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
                                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+1;
                                                             end
                                                         else
                                                             if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2)))
-                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
+                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2),:))
                                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1))+1;
                                                             else
-                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
+                                                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))-0.0225*numel(cond4effect{rmEffect(nRm2)})*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm1)}(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,1),:))
                                                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm1)})(i,2))+1;
                                                             end
                                                         end
@@ -2830,8 +2860,8 @@ if ~isempty(saveDir)
                 f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
 
                 for nMod=1:numel(modalitiesInd{nInd})
-                    dataMeans(nMod)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),2));
-                    dataSD(nMod)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),2));
+                    dataMeans(nMod)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod})),2));
+                    dataSD(nMod)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod})),2));
                 end
 
                 for x=1:numel(modalitiesInd{nInd})
@@ -2851,7 +2881,7 @@ if ~isempty(saveDir)
                     end
 
                     if indivLines==1
-                        scatter(x,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x}),2), 'kx' ,'handlevisibility','off')
+                        scatter(x,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x})),2), 'kx' ,'handlevisibility','off')
                     end
 
                     if abs(dataMeans(x))<1
@@ -2899,7 +2929,7 @@ if ~isempty(saveDir)
                     for i=1:numel(pValues)
                         pV=pValues(i);
                         if pV<=pcritical(end)
-                            if yl(2)>0
+                            if abs(yl(2))>abs(yl(1))
                                 if pV<pcritical(1) & isSignificant==1
                                     hline(yl(2)+0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNamesVerif{indEffect(nInd)})(i,:),'lineWidth',1.5);
                                 else
@@ -2929,11 +2959,11 @@ if ~isempty(saveDir)
                     f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
                     hline(0, 'xLimits',[0 (numel(modalitiesRM{nRm})+1)],'linetype','-k', 'linewidth',0.5); hold on
                     for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
-                        for n=1:size(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),1)
+                        for n=1:size(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod})),1)
                             if n==1
-                                scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','on')
+                                scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','on')
                             else
-                                scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                                scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
                             end
                         end
                     end
@@ -2965,8 +2995,8 @@ if ~isempty(saveDir)
             f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
 
             for nMod=1:numel(modalitiesInd{nInd})
-                dataMeans(nMod)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),2));
-                dataSD(nMod)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),2));
+                dataMeans(nMod)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod})),2));
+                dataSD(nMod)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod})),2));
             end
 
             for x=1:numel(modalitiesInd{nInd})
@@ -2986,7 +3016,7 @@ if ~isempty(saveDir)
                 end
 
                 if indivLines==1
-                    scatter(x,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x}),2), 'kx' ,'handlevisibility','off')
+                    scatter(x,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x})),2), 'kx' ,'handlevisibility','off')
                 end
 
                 if abs(dataMeans(x))<1
@@ -3040,7 +3070,7 @@ if ~isempty(saveDir)
                 for i=1:numel(pValues)
                     pV=pValues(i);
                     if pV<=pcritical(end)
-                        if yl(2)>0
+                        if abs(yl(2))>abs(yl(1))
                             if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2)))
                                 addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,1), yl(2)+0.055*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,2),:))
                                 nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))+1;
@@ -3073,11 +3103,11 @@ if ~isempty(saveDir)
                 f=figure('units','centimeters','position',[0 0 6+4*numel(modalitiesInd{nInd}) 4+9/16*4*numel(modalitiesInd{nInd})],'visible','off');
                 hline(0, 'xLimits',[0 (numel(modalitiesRM{nRm})+1)],'linetype','-k', 'linewidth',0.5); hold on
                 for nMod=1:numel(allMod.(condNamesVerif{indEffect(nInd)}))
-                    for n=1:size(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod}),1)
+                    for n=1:size(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod})),1)
                         if n==1
-                            scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','on')
+                            scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','on')
                         else
-                            scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){nMod})(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
+                            scatter(nMod,mean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(n,:)), '+', 'MarkerFaceColor', colors{indEffect(nInd)}(nMod,:), 'MarkerEdgeColor', colors{indEffect(nInd)}(nMod,:),'handlevisibility','off')
                         end
                     end
                 end
@@ -3116,8 +3146,8 @@ if ~isempty(saveDir)
                         subplot(numel(allMod.(condNamesVerif{rmEffect(nRm)})),1,nMod)
 
                         for x=1:numel(modalitiesInd{nInd})
-                            dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
-                            dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
+                            dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
+                            dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
                         end
 
                         for x=1:numel(modalitiesInd{nInd})
@@ -3173,8 +3203,8 @@ if ~isempty(saveDir)
                         set(f,'CurrentAxes',ax{nMod});
 
                         for x=1:numel(modalitiesInd{nInd})
-                            dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
-                            dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
+                            dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
+                            dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
                         end
 
                         pValues=ones(1,size(postHoc.(condNamesVerif{indEffect(nInd)}),1));
@@ -3210,7 +3240,7 @@ if ~isempty(saveDir)
                             for i=1:numel(pValues)
                                 pV=pValues(i);
                                 if pV<=pcritical(end)
-                                    if yl(2)>0
+                                    if abs(yl(2))>abs(yl(1))
                                         if pV<pcritical(1) & isSignificant==1
                                             hline(yl(2)+0.05*nSignificant*amp,'linetype','-k','xLimits',order4ES.(condNamesVerif{indEffect(nInd)})(i,:),'lineWidth',1.5);
                                         else
@@ -3253,8 +3283,8 @@ if ~isempty(saveDir)
                     subplot(numel(allMod.(condNamesVerif{rmEffect(nRm)})),1,nMod)
 
                     for x=1:numel(modalitiesInd{nInd})
-                        dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
-                        dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
+                        dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
+                        dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
                     end
 
                     for x=1:numel(modalitiesInd{nInd})
@@ -3311,8 +3341,8 @@ if ~isempty(saveDir)
                     set(f,'CurrentAxes',ax{nMod});
 
                     for x=1:numel(modalitiesInd{nInd})
-                        dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
-                        dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(allMod.(condNamesVerif{indEffect(nInd)}){x})(:,col4means{nRm}(nMod,:)),2));
+                        dataMeans(x)=nanmean(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
+                        dataSD(x)=nanstd(nanmean(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){x}))(:,col4means{nRm}(nMod,:)),2));
                     end
 
                     pValues=ones(1,size(postHoc.(condNamesVerif{indEffect(nInd)}),1));
@@ -3338,8 +3368,9 @@ if ~isempty(saveDir)
                     %                     pSelected=1;
                     %                 end
 
+                    dataMeans4pv=dataMeans;
                     if plotSD==1
-                        dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                        dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
                     end
 
                     nColSignificant=ones(1,numel(dataMeans));
@@ -3350,18 +3381,18 @@ if ~isempty(saveDir)
                             if pV<=pcritical(end)
                                 if yl(2,nMod)>0
                                     if (dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1)))>(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2)))
-                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))+0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,2),:))
+                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))+0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,2),:))
                                         nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))+1;
                                     else
-                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))+0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,1),:))
+                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))+0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,1),:))
                                         nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))+1;
                                     end
                                 else
                                     if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2)))
-                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,1), dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))-0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,2),:))
+                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))-0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,2),:))
                                         nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,1))+1;
                                     else
-                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,2), dataMeans(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))-0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,1),:))
+                                        addPvalue(order4ES.(condNamesVerif{indEffect(nInd)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))-0.0225*numel(allMod.(condNamesVerif{rmEffect(nRm)}))*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd)}(order4ES.(condNamesVerif{indEffect(nInd)})(i,1),:))
                                         nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd)})(i,2))+1;
                                     end
                                 end
@@ -3468,7 +3499,7 @@ if ~isempty(saveDir)
                             pSelected=0;
                             if pINT<pcritical(1)
                                 isSignificant=1;
-                                phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                 pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                                 pSelected=1;
                             end
@@ -3478,7 +3509,7 @@ if ~isempty(saveDir)
                             %                             pSelected=1;
                             %                         end
                             if pINT<pcritical(end) &  pSelected==0
-                                phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                 pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                                 pSelected=1;
                             end
@@ -3601,8 +3632,9 @@ if ~isempty(saveDir)
                             dataSD(nMod1)=nanstd(nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nMod1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nMod2}),2));
                         end
 
+                        dataMeans4pv=dataMeans;
                         if plotSD==1
-                            dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                            dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
                         end
 
                         isSignificant=0;
@@ -3611,7 +3643,7 @@ if ~isempty(saveDir)
                         pSelected=0;
                         if pINT<pcritical(1)
                             isSignificant=1;
-                            phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                            phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                             pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                             pSelected=1;
                         end
@@ -3621,7 +3653,7 @@ if ~isempty(saveDir)
                         %                         pSelected=1;
                         %                     end
                         if pINT<pcritical(end) &  pSelected==0
-                            phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                            phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                             pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                             pSelected=1;
                         end
@@ -3636,20 +3668,20 @@ if ~isempty(saveDir)
                             for i=1:numel(pValues)
                                 pV=pValues(i);
                                 if pV<=pcritical(end)
-                                    if yl(2)>0
+                                    if abs(yl(2))>abs(yl(1))
                                         if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2)))
-                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
+                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
                                             nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+1;
                                         else
-                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
+                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
                                             nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+1;
                                         end
                                     else
                                         if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2)))
-                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
+                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
                                             nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+1;
                                         else
-                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
+                                            addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
                                             nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+1;
                                         end
                                     end
@@ -3786,10 +3818,10 @@ if ~isempty(saveDir)
                                     %                                     isSignificant=1;
                                     %                                     pSelected=1;
                                     %                                     if pINT<pINT2
-                                    %                                         phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
                                     %                                         pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){phCut,6};
                                     %                                     else
-                                    %                                         phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                     %                                         pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                                     %                                     end
                                     %                                 end
@@ -3811,10 +3843,10 @@ if ~isempty(saveDir)
                                     %                                     isSignificant=1;
                                     %                                     pSelected=1;
                                     %                                     if pINT<pINT2
-                                    %                                         phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
                                     %                                         pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){phCut,6};
                                     %                                     else
-                                    %                                         phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                    %                                         phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                     %                                         pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                                     %                                     end
                                     %                                 end
@@ -3953,8 +3985,9 @@ if ~isempty(saveDir)
                                     dataSD(nMod1)=nanstd(nanmean(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nMod1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nMod2})(:,col4means{nRm}(nModRm,:)),2));
                                 end
 
+                                dataMeans4pv=dataMeans;
                                 if plotSD==1
-                                    dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                                    dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
                                 end
 
                                 isSignificant=0;
@@ -3974,10 +4007,10 @@ if ~isempty(saveDir)
                                 %                                 isSignificant=1;
                                 %                                 pSelected=1;
                                 %                                 if pINT<pINT2
-                                %                                     phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
+                                %                                     phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
                                 %                                     pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){phCut,6};
                                 %                                 else
-                                %                                     phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                %                                     phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                 %                                     pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                                 %                                 end
                                 %                             end
@@ -3999,10 +4032,10 @@ if ~isempty(saveDir)
                                 %                                 isSignificant=1;
                                 %                                 pSelected=1;
                                 %                                 if pINT<pINT2
-                                %                                     phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
+                                %                                     phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){:,1}, allMod.(condNamesVerif{rmEffect(nRm)}){nModRm});
                                 %                                     pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{rmEffect(nRm)}]){phCut,6};
                                 %                                 else
-                                %                                     phCut=findcol(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
+                                %                                     phCut=findcolExact(postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){:,1}, allMod.(condNamesVerif{indEffect(nInd2)}){nMod2});
                                 %                                     pValues=postHoc.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]){phCut,6};
                                 %                                 end
                                 %                             end
@@ -4018,21 +4051,21 @@ if ~isempty(saveDir)
                                     for i=1:numel(pValues)
                                         pV=pValues(i);
                                         if pV<=pcritical(end)
-                                            if yl(2)>0
+                                            if abs(yl(2))>abs(yl(1))
                                                 if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2)))
-                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
+                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
                                                     nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+1;
                                                 else
-                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
+                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
                                                     nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+1;
 
                                                 end
                                             else
                                                 if abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2)))
-                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
+                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2),:))
                                                     nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1))+1;
                                                 else
-                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
+                                                    addPvalue(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))-0.0225*numel(modalitiesInd{nInd2})*nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))*amp, pV, pcritical, colors{indEffect(nInd1)}(order4ES.(condNamesVerif{indEffect(nInd1)})(i,1),:))
                                                     nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))=nColSignificant(order4ES.(condNamesVerif{indEffect(nInd1)})(i,2))+1;
                                                 end
                                             end
