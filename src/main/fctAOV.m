@@ -1112,15 +1112,6 @@ if ~isempty(saveDir)
                 scatter(xl,dataLines,'k+')
             end
 
-            dataMeans4pv=dataMeans;
-            if plotSD==1
-                dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
-            end
-            if indivLines==1
-                dataMeans4pv=abs(max(dataLines)).*sign(dataMeans);
-            end
-            clear dataLines
-
             for x=1:numel(modalitiesRM{nRm})
                 if abs(dataMeans(x))<1
                     text(x,0.5*(dataMeans(x)),sprintf('%.3f',dataMeans(x)),'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',12,'Color',rgb('white'),'FontWeight','bold')
@@ -1160,9 +1151,17 @@ if ~isempty(saveDir)
                 pSelected=1;
             end
 
+            dataMeans4pv=dataMeans;
             if plotSD==1
-                dataMeans=dataMeans+sign(dataMeans).*dataSD;
+                dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
             end
+            if indivLines==1
+                dataMeans4pv=max(abs(dataLines)).*sign(dataMeans);
+            end
+            if plotSD==1 && indivLines==1
+                dataMeans4pv=sign(dataMeans).*max([abs(dataMeans+sign(dataMeans).*dataSD); max(abs(dataLines))]);
+            end
+            clear dataLines
 
             nColSignificant=ones(1,numel(dataMeans));
             nSignificant=1;
@@ -1171,19 +1170,19 @@ if ~isempty(saveDir)
                     pV=pValues(i);
                     if pV<=pcritical(end)
                         if abs(yl(2))>abs(yl(1))
-                            if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2)))
-                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1), yl(2)+0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2),:))
+                            if abs(dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1)))>abs(dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2)))
+                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))+0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2),:))
                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))+1;
                             else
-                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2), yl(2)+0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1),:))
+                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))+0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1),:))
                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))+1;
                             end
                         else
-                            if abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1)))>abs(dataMeans(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2)))
-                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1), yl(1)-0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2),:))
+                            if abs(dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1)))>abs(dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2)))
+                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))-0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2),:))
                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1))+1;
                             else
-                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2), yl(1)-0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1),:))
+                                addPvalue(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2), dataMeans4pv(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))-0.055*nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))*amp, pV, pcritical, colors{rmEffect(nRm)}(order4ES.(condNamesVerif{rmEffect(nRm)})(i,1),:))
                                 nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))=nColSignificant(order4ES.(condNamesVerif{rmEffect(nRm)})(i,2))+1;
                             end
                         end
@@ -1467,7 +1466,10 @@ if ~isempty(saveDir)
                                 dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
                             end
                             if indivLines==1
-                                dataMeans4pv=abs(max(varData)).*sign(dataMeans);
+                                dataMeans4pv=max(abs(varData)).*sign(dataMeans);
+                            end
+                            if plotSD==1 && indivLines==1
+                                dataMeans4pv=sign(dataMeans).*max([abs(dataMeans+sign(dataMeans).*dataSD); max(abs(varData)).*sign(dataMeans)]);
                             end
 
                             isSignificant=0;
@@ -2440,8 +2442,12 @@ if ~isempty(saveDir)
                                     dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
                                 end
                                 if indivLines==1
-                                    dataMeans4pv=abs(max(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans);
+                                    dataMeans4pv=max(abs(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans);
                                 end
+                                if plotSD==1 && indivLines==1
+                                    dataMeans4pv=sign(dataMeans).*max([abs(dataMeans+sign(dataMeans).*dataSD); max(abs(data4plot.(condNamesVerif{indEffect(nInd)}).(verifFieldName(allMod.(condNamesVerif{indEffect(nInd)}){nMod}))(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans)]);
+                                end
+
 
                                 isSignificant=0;
                                 set(f,'CurrentAxes',ax{nModRm});
@@ -2771,7 +2777,10 @@ if ~isempty(saveDir)
                                                 dataMeans4pv=dataMeans+sign(dataMeans).*dataSD;
                                             end
                                             if indivLines==1
-                                                dataMeans4pv=abs(max(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans);
+                                                dataMeans4pv=max(abs(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans);
+                                            end
+                                            if plotSD==1 && indivLines==1
+                                                dataMeans4pv=sign(dataMeans).*max([abs(dataMeans+sign(dataMeans).*dataSD); max(abs(data4plot.([condNames{indEffect(nInd1)} 'By' condNames{indEffect(nInd2)}]).(allMod.(condNamesVerif{indEffect(nInd1)}){nModInd1}).(allMod.(condNamesVerif{indEffect(nInd2)}){nModInd2})(:,col4means{nRm1}(:,nModRm)))).*sign(dataMeans)]);
                                             end
 
                                             isSignificant=0;

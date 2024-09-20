@@ -83,7 +83,8 @@ if numel(stats.condNames)==2
         else
             vt{loop,1}=sprintf('F=%.3g, p<%.3f', tables.aov{e,5}, 0.001);
         end
-        loop=loop+1;
+        vt{loop+1,1}=sprintf('%.4f', tables.aov{e,6});
+        loop=loop+2;
     end
 
     tableStats(:,size(tableStats,2)+1)=vt;
@@ -100,7 +101,7 @@ elseif numel(stats.condNames)==1
     end
 
     if isempty(tableStats)
-        tableStats=array2table([e1; c1'; "ALL"; e1]);
+        tableStats=array2table([e1; c1'; "ALL"; [e1 + " aov"]; [e1 + " p-value"]]);
     end
 
     loop=2;
@@ -136,18 +137,21 @@ elseif numel(stats.condNames)==1
     end
 
     if indEffect
-    if tables.aov{1,6}{1}>0.001
-        vt{loop,1}=sprintf('F=%.3g, p=%.3f', tables.aov{1,5}{1}, tables.aov{1,6}{1});
-    else
-        vt{loop,1}=sprintf('F=%.3g, p<%.3f', tables.aov{1,5}{1}, 0.001);
-    end
+        if tables.aov{1,6}{1}>0.001
+            vt{loop,1}=sprintf('F=%.3g, p=%.3f', tables.aov{1,5}{1}, tables.aov{1,6}{1});
+        else
+            vt{loop,1}=sprintf('F=%.3g, p<%.3f', tables.aov{1,5}{1}, 0.001);
+        end
+        vt{loop+1,1}=sprintf('%.5f', tables.aov{1,6}{1});
+
     else
 
- if tables.aov{1,6}>0.001
-        vt{loop,1}=sprintf('F=%.3g, p=%.3f', tables.aov{1,5}, tables.aov{1,6});
-    else
-        vt{loop,1}=sprintf('F=%.3g, p<%.3f', tables.aov{1,5}, 0.001);
- end
+        if tables.aov{1,6}>0.001
+            vt{loop,1}=sprintf('F=%.3g, p=%.3f', tables.aov{1,5}, tables.aov{1,6});
+        else
+            vt{loop,1}=sprintf('F=%.3g, p<%.3f', tables.aov{1,5}, 0.001);
+        end
+        vt{loop+1,1}=sprintf('%.5f', tables.aov{1,6});
 
     end
 
